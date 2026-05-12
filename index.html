@@ -1,0 +1,316 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Inner Compass Project | Mental Health Advocacy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        teal: { 400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 900: '#134e4a' },
+                        blue: { 900: '#1e3a8a', 950: '#172554' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+        html { scroll-behavior: smooth; }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased selection:bg-teal-200">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md shadow-sm py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-blue-900 via-teal-600 to-green-400 text-white shadow-lg">
+                    <i class="ph-bold ph-compass text-2xl absolute"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-xl leading-tight text-blue-950">Inner Compass</h1>
+                    <p class="text-[10px] font-bold text-teal-600 uppercase tracking-widest">Project</p>
+                </div>
+            </div>
+            
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center gap-8 font-medium text-slate-600 text-sm">
+                <a href="#about" class="hover:text-teal-600 transition-colors">Our Mission</a>
+                <a href="#programs" class="hover:text-teal-600 transition-colors">What We Do</a>
+                <a href="#membership" class="hover:text-teal-600 transition-colors">Membership</a>
+                <a href="#join" class="bg-blue-950 text-white px-6 py-2.5 rounded-full hover:bg-teal-700 transition-all duration-300 transform hover:-translate-y-0.5 shadow-md">Join Us</a>
+            </div>
+
+            <!-- Mobile Menu Icon (Simplified for display) -->
+            <div class="md:hidden text-2xl text-slate-600">
+                <i class="ph-bold ph-list"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-teal-400/20 rounded-full blur-[120px] -z-10"></div>
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-teal-100 shadow-sm text-sm font-medium text-teal-700 mb-8">
+                <i class="ph-fill ph-users-three text-teal-500"></i> Open to everyone. Together we are stronger.
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight mb-6">
+                Find Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-900 via-teal-600 to-green-500">True North</span>
+            </h1>
+            <p class="max-w-2xl mx-auto text-lg md:text-xl text-slate-600 mb-10 leading-relaxed">
+                A mental health advocacy network empowering individuals and fostering a supportive community. We help you find clarity and purpose on your journey to mental wellness.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <a href="#join" class="w-full sm:w-auto px-8 py-4 rounded-full bg-blue-950 text-white font-medium hover:bg-teal-700 hover:shadow-xl hover:shadow-teal-500/20 transition-all flex items-center justify-center gap-2">
+                    Join the Community <i class="ph-bold ph-arrow-right"></i>
+                </a>
+                <a href="#membership" class="w-full sm:w-auto px-8 py-4 rounded-full bg-white text-blue-950 font-medium border border-slate-200 hover:bg-slate-50 transition-all flex items-center justify-center gap-2 shadow-sm">
+                    View Membership Roles
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Vision Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-slate-900">What We Stand For</h2>
+                <p class="text-slate-600 mt-4 max-w-2xl mx-auto">Mental well-being should be a fundamental right, not a privilege. We are building a comprehensive support network.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 hover:shadow-lg transition-shadow">
+                    <div class="w-14 h-14 bg-blue-100 text-blue-700 rounded-2xl flex items-center justify-center mb-6 text-3xl">
+                        <i class="ph-fill ph-chat-centered-text"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Direct Communication</h3>
+                    <p class="text-slate-600">Facilitating direct communication with qualified mental health professionals for immediate support.</p>
+                </div>
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 hover:shadow-lg transition-shadow">
+                    <div class="w-14 h-14 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center mb-6 text-3xl">
+                        <i class="ph-fill ph-hand-heart"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Accessible Care</h3>
+                    <p class="text-slate-600">Advocating for the establishment of free mental health resources accessible to all, regardless of circumstances.</p>
+                </div>
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 hover:shadow-lg transition-shadow">
+                    <div class="w-14 h-14 bg-green-100 text-green-700 rounded-2xl flex items-center justify-center mb-6 text-3xl">
+                        <i class="ph-fill ph-users-three"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Supportive Community</h3>
+                    <p class="text-slate-600">Building strong networks of support and understanding where healing becomes possible for everyone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Programs Curriculum -->
+    <section id="programs" class="py-20 bg-slate-900 text-white relative overflow-hidden">
+        <div class="absolute right-0 bottom-0 w-1/2 h-full bg-gradient-to-tl from-teal-900/50 to-transparent pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center">Our Community Programs</h2>
+            <p class="text-slate-400 text-center max-w-2xl mx-auto mb-12">We organize impactful semesterly programs designed to foster personal growth and community outreach.</p>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Semester 1 -->
+                <div class="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
+                    <h3 class="text-2xl font-bold text-teal-400 mb-6 border-b border-white/10 pb-4">First Semester</h3>
+                    <ul class="space-y-6">
+                        <li class="flex gap-4">
+                            <i class="ph-fill ph-video-camera text-2xl text-slate-400"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">Webinar Sessions</h4>
+                                <p class="text-slate-400 text-sm mt-1">Virtual platform for engaging discussions featuring expert speakers on personal development.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <i class="ph-fill ph-megaphone text-2xl text-slate-400"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">Community Outreach</h4>
+                                <p class="text-slate-400 text-sm mt-1">Connecting with the community, encouraging volunteerism, and making a positive impact on local neighborhoods.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Semester 2 -->
+                <div class="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
+                    <h3 class="text-2xl font-bold text-blue-400 mb-6 border-b border-white/10 pb-4">Second Semester</h3>
+                    <ul class="space-y-6">
+                        <li class="flex gap-4">
+                            <i class="ph-fill ph-compass-tool text-2xl text-slate-400"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">Self-Discovery Workshops</h4>
+                                <p class="text-slate-400 text-sm mt-1">Interactive sessions exploring identity, values, and resources for members seeking growth.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <i class="ph-fill ph-radio text-2xl text-slate-400"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">Radio Program & Summit</h4>
+                                <p class="text-slate-400 text-sm mt-1">Informative broadcasts and a culminating networking event bringing experts and community together.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Membership Types & Benefits -->
+    <section id="membership" class="py-20 bg-teal-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Two Ways to Join Us</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">The Inner Compass Project is open to everyone. You can join as a general member to access resources and community, or apply to be an executive to lead our initiatives.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
+                <!-- General Member -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center mb-6 text-2xl">
+                        <i class="ph-fill ph-user"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-900 mb-4">General Member</h3>
+                    <p class="text-slate-600 mb-6">Perfect for individuals looking for a supportive mental health community and resources.</p>
+                    <ul class="space-y-3 text-slate-700 text-sm">
+                        <li class="flex items-center gap-2"><i class="ph-bold ph-check text-teal-600"></i> Access to all community workshops & webinars</li>
+                        <li class="flex items-center gap-2"><i class="ph-bold ph-check text-teal-600"></i> Peer support network and safe spaces</li>
+                        <li class="flex items-center gap-2"><i class="ph-bold ph-check text-teal-600"></i> Free mental health resource toolkits</li>
+                        <li class="flex items-center gap-2"><i class="ph-bold ph-check text-teal-600"></i> Invitations to the Inner Compass Summit</li>
+                    </ul>
+                </div>
+
+                <!-- Executive Team -->
+                <div class="bg-gradient-to-br from-blue-900 to-teal-800 p-8 rounded-3xl shadow-lg text-white relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-8 opacity-10">
+                        <i class="ph-fill ph-star text-9xl"></i>
+                    </div>
+                    <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-6 text-2xl relative z-10">
+                        <i class="ph-fill ph-crown text-teal-300"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 relative z-10">Executive Team</h3>
+                    <p class="text-blue-100 mb-6 relative z-10">For passionate advocates ready to take on leadership roles and drive international change.</p>
+                    <ul class="space-y-3 text-white text-sm relative z-10">
+                        <li class="flex items-center gap-2"><i class="ph-bold ph-check text-teal-300"></i> <strong>Global Recognition:</strong> Contributions on an international level</li>
+                        <li class="flex items-center gap-2"><i class="ph-bold ph-check text-teal-300"></i> <strong>Internships:</strong> Access to impactful practical experience</li>
+                        <li class="flex items-center gap-2"><i class="ph-bold ph-check text-teal-300"></i> <strong>Leadership Training:</strong> Cultivate essential skills</li>
+                        <li class="flex items-center gap-2"><i class="ph-bold ph-check text-teal-300"></i> <strong>Networking:</strong> Connect with mentors and professionals</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Join Form -->
+    <section id="join" class="py-24 bg-white">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-[32px] shadow-2xl p-8 md:p-12 border border-slate-100 relative overflow-hidden">
+                <!-- Decorative elements -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-teal-50 rounded-full blur-3xl -z-10 -translate-y-1/2 translate-x-1/2"></div>
+                <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -z-10 translate-y-1/2 -translate-x-1/2"></div>
+
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Join The Inner Compass</h2>
+                    <p class="text-slate-600 mt-3">Take the first step towards a healthier, more connected world. Fill out the form below to get started.</p>
+                </div>
+
+                <form id="joinForm" class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Full Name</label>
+                            <input type="text" id="name" required placeholder="Jane Doe" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all bg-slate-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Email Address</label>
+                            <input type="email" id="email" required placeholder="jane@example.com" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all bg-slate-50">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">I want to join as a:</label>
+                        <select id="role" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all bg-slate-50 cursor-pointer appearance-none">
+                            <option value="" disabled selected>Select your desired role...</option>
+                            <option value="Member">General Member</option>
+                            <option value="Executive">Executive Team Member</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Why are you joining? <span class="text-slate-400 font-normal">(Optional)</span></label>
+                        <textarea id="message" rows="3" placeholder="Tell us a little bit about yourself or why mental health advocacy matters to you..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all bg-slate-50 resize-none"></textarea>
+                    </div>
+
+                    <div id="formStatus" class="text-center font-medium text-sm h-6"></div>
+
+                    <button type="submit" id="submitBtn" class="w-full py-4 rounded-xl bg-gradient-to-r from-blue-900 to-teal-700 text-white font-bold text-lg hover:from-blue-800 hover:to-teal-600 transition-all duration-300 shadow-lg hover:shadow-teal-500/25 transform hover:-translate-y-0.5">
+                        Submit Application
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-900 text-slate-400 py-12 text-center text-sm border-t border-slate-800">
+        <div class="flex items-center justify-center gap-2 mb-4">
+            <i class="ph-bold ph-compass text-2xl text-teal-500"></i>
+            <span class="font-bold text-white text-lg">The Inner Compass Project</span>
+        </div>
+        <p>&copy; 2026 The Inner Compass Project. "Find Your True North." All rights reserved.</p>
+    </footer>
+
+    <!-- Form Handling Logic -->
+    <script>
+        document.getElementById('joinForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const status = document.getElementById('formStatus');
+            
+            btn.disabled = true;
+            btn.innerHTML = 'Submitting... <i class="ph ph-spinner animate-spin"></i>';
+            status.innerHTML = '';
+
+            const payload = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                role: document.getElementById('role').value,
+                message: document.getElementById('message').value
+            };
+
+            try {
+                const res = await fetch('/api/join', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await res.json();
+
+                if(res.ok) {
+                    status.innerHTML = `<span class="text-teal-600 bg-teal-50 px-4 py-2 rounded-lg"><i class="ph-fill ph-check-circle"></i> Welcome! Your application has been successfully received.</span>`;
+                    document.getElementById('joinForm').reset();
+                } else {
+                    status.innerHTML = `<span class="text-red-500 bg-red-50 px-4 py-2 rounded-lg">Error: ${data.error || 'Submission failed.'}</span>`;
+                }
+            } catch (err) {
+                console.error(err);
+                status.innerHTML = `<span class="text-amber-500 bg-amber-50 px-4 py-2 rounded-lg">Cannot connect to server. Check if your backend is running.</span>`;
+            }
+            
+            btn.disabled = false;
+            btn.innerHTML = 'Submit Application';
+        });
+    </script>
+</body>
+</html>
+
+
+```
+
