@@ -5,14 +5,20 @@ import cloudinary.uploader
 
 app = Flask(__name__)
 
-# SAFE CONFIG: Only configures if the variable exists
-cloudinary_url = os.environ.get('CLOUDINARY_URL')
-if cloudinary_url:
-    cloudinary.config(secure=True)
+# This prevents the crash even if the URL is formatted wrong
+CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
+
+if CLOUDINARY_URL:
+    try:
+        cloudinary.config(secure=True)
+    except Exception:
+        pass
 
 @app.route('/')
 def home():
-    return "Inner Compass is running! Cloudinary is " + ("Connected" if cloudinary_url else "Not Connected")
+    if not CLOUDINARY_URL:
+        return "<h3>Inner Compass: System Missing Keys</h3><p>Please add CLOUDINARY_URL to Railway Variables.</p>"
+    return "<h3>Inner Compass is Live!</h3><p>Visit <a href='/upload-page'>/upload-page</a> to upload files.</p>"
 
 @app.route('/upload-page')
 def upload_page():
@@ -20,19 +26,16 @@ def upload_page():
 
 @app.route('/upload', methods=['POST'])
 def handle_upload():
-    if not cloudinary_url:
-        return "System Error: Cloudinary keys are missing in Railway Variables.", 500
-        
     file = request.files.get('file_to_upload')
     if file:
         try:
-            result = cloudinary.uploader.upload(file, folder="inner_compass")
-            return f"Success! Link: {result['secure_url']}"
+            folder = "inner_compass_docs" if file.filename.endswith('.pdf') else "inner_compass_images"
+            result = cloudinary.uploader.upload(file, folder=folder)
+            return f"Success! Link: <a href='{result['secure_url']}'>{result['secure_url']}</a>"
         except Exception as e:
-            return f"Upload Failed: {str(e)}", 500
+            return f"Upload Error: {str(e)}"
     return "No file selected", 400
 
 if __name__ == "__main__":
-    # Important for Railway: it needs to bind to 0.0.0.0
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
