@@ -35,10 +35,34 @@
 
         h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; }
 
+        /* --- ANNOUNCEMENT BAR --- */
+        .announcement-bar {
+            background: linear-gradient(90deg, var(--deep-blue), var(--teal-green));
+            color: var(--soft-white);
+            text-align: center;
+            padding: 8px 5%;
+            font-size: 0.85rem;
+            font-weight: 500;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1001;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            letter-spacing: 0.5px;
+        }
+        .announcement-bar a {
+            color: var(--soft-gold);
+            text-decoration: none;
+            margin-left: 10px;
+            font-weight: 600;
+            border-bottom: 1px dashed var(--soft-gold);
+        }
+
         /* --- GLASSMORPHISM NAVBAR --- */
         nav {
             position: fixed;
-            top: 0; width: 100%; z-index: 1000;
+            top: 35px; /* Pushed down to make room for announcement bar */
+            width: 100%; z-index: 1000;
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 5%;
             background: rgba(27, 38, 59, 0.7);
@@ -77,6 +101,7 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; padding: 0 5%;
             position: relative;
+            margin-top: 30px; 
         }
         .hero h1 {
             font-size: 4.5rem; font-weight: 800;
@@ -95,7 +120,7 @@
             100% { transform: translateY(0px); }
         }
 
-        /* --- 2. MOOD CHECK-IN (SPECIAL SECTION) --- */
+        /* --- MOOD WIDGET --- */
         .mood-widget {
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
@@ -118,7 +143,7 @@
         .section-title h2 { font-size: 2.5rem; color: var(--neon-teal); margin-bottom: 15px; }
         .section-title p { color: #aaa; max-width: 600px; margin: 0 auto; }
 
-        /* --- 3. WHAT WE DO (SERVICES GRID) --- */
+        /* --- GLASS CARDS (GRID) --- */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
         .glass-card {
             background: var(--glass-bg);
@@ -141,18 +166,35 @@
             box-shadow: 0 10px 30px rgba(79, 255, 213, 0.15);
             border-color: rgba(79, 255, 213, 0.5);
         }
-        .glass-card h3 { color: var(--soft-gold); margin-bottom: 15px; font-size: 1.3rem; }
-        .glass-card p { color: #bbb; font-size: 0.95rem; line-height: 1.6; }
 
-        /* --- 4. RESOURCE HUB --- */
+        /* --- RESOURCE HUB --- */
         .resource-banner {
             background: linear-gradient(135deg, var(--deep-blue), var(--teal-green));
             border-radius: 20px; padding: 50px; text-align: center;
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             position: relative; overflow: hidden;
         }
-        .resource-banner h3 { font-size: 2rem; margin-bottom: 20px; }
-        
+        .resource-banner h3 { font-size: 2.2rem; margin-bottom: 20px; color: var(--soft-white); font-weight: 800;}
+        .resource-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
+
+        /* --- FLOATING HELP BUTTON --- */
+        .floating-help-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--neon-teal);
+            color: var(--dark-navy);
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            text-decoration: none;
+            box-shadow: 0 5px 20px rgba(79, 255, 213, 0.4);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        .floating-help-btn:hover { transform: scale(1.05) translateY(-5px); }
+
         /* --- FOOTER --- */
         footer {
             background: #0a1626; padding: 60px 5% 30px; text-align: center;
@@ -167,10 +209,15 @@
             .mobile-menu-btn { display: block; }
             .hero h1 { font-size: 3rem; }
             .mood-widget { flex-direction: column; text-align: center; padding: 20px; }
+            nav { top: 50px; }
         }
     </style>
 </head>
 <body>
+
+    <div class="announcement-bar">
+        📢 Welcome to The Inner Compass Project! Join our upcoming Webinar Series. <a href="/signup">Register Now &rarr;</a>
+    </div>
 
     <nav>
         <a href="#" class="brand">
@@ -182,12 +229,15 @@
         <div class="nav-links">
             <a href="#about">About</a>
             <a href="#services">Programs</a>
-            <a href="#resources">Resource Hub</a>
+            <a href="#resources">Resources</a>
+            <a href="#contact">Contact</a>
             <a href="/login" class="btn-glow" style="margin-left: 15px;">Log In</a>
             <a href="/signup" class="btn-glow" style="background: var(--neon-teal); color: var(--dark-navy);">Join Us</a>
         </div>
         <button class="mobile-menu-btn">☰</button>
     </nav>
+
+    <a href="mailto:Innercompassproject25@gmail.com" class="floating-help-btn">Need Help? 💬</a>
 
     <header class="hero">
         <h3>You are not alone.</h3>
@@ -214,16 +264,16 @@
         </div>
         <div class="grid">
             <div class="glass-card">
-                <h3>🧭 Guidance</h3>
-                <p>Helping individuals find clarity and purpose on their journey to mental wellness through structured mentorship and dialogue.</p>
+                <h3 style="color: var(--soft-gold); margin-bottom: 15px; font-size: 1.3rem;">🧭 Guidance</h3>
+                <p style="color: #bbb; line-height: 1.6;">Helping individuals find clarity and purpose on their journey to mental wellness through structured mentorship and dialogue.</p>
             </div>
             <div class="glass-card">
-                <h3>💙 Community</h3>
-                <p>Building strong networks of support and understanding among members and partners. Empathy is our foundation.</p>
+                <h3 style="color: var(--soft-gold); margin-bottom: 15px; font-size: 1.3rem;">💙 Community</h3>
+                <p style="color: #bbb; line-height: 1.6;">Building strong networks of support and understanding among members and partners. Empathy is our foundation.</p>
             </div>
             <div class="glass-card">
-                <h3>🌱 Growth</h3>
-                <p>Fostering emotional resilience, leadership development, and personal growth in a safe, futuristic digital space.</p>
+                <h3 style="color: var(--soft-gold); margin-bottom: 15px; font-size: 1.3rem;">🌱 Growth</h3>
+                <p style="color: #bbb; line-height: 1.6;">Fostering emotional resilience, leadership development, and personal growth in a safe, futuristic digital space.</p>
             </div>
         </div>
     </section>
@@ -235,20 +285,20 @@
         </div>
         <div class="grid">
             <div class="glass-card">
-                <h3 style="color: var(--neon-teal);">🧠 Webinar Series</h3>
-                <p>Engaging virtual discussions featuring expert speakers delving into mental health and collective development.</p>
+                <h3 style="color: var(--neon-teal); margin-bottom: 15px; font-size: 1.3rem;">🧠 Webinar Series</h3>
+                <p style="color: #bbb; line-height: 1.6;">Engaging virtual discussions featuring expert speakers delving into mental health and collective development.</p>
             </div>
             <div class="glass-card">
-                <h3 style="color: var(--neon-teal);">💬 Dialogue Sessions</h3>
-                <p>Safe spaces for anonymous stories, testimonials, and peer-to-peer engagement to break the stigma.</p>
+                <h3 style="color: var(--neon-teal); margin-bottom: 15px; font-size: 1.3rem;">💬 Dialogue Sessions</h3>
+                <p style="color: #bbb; line-height: 1.6;">Safe spaces for anonymous stories, testimonials, and peer-to-peer engagement to break the stigma.</p>
             </div>
             <div class="glass-card">
-                <h3 style="color: var(--neon-teal);">🤝 Community Service</h3>
-                <p>School outreach programs and volunteer opportunities to make a tangible impact in local neighborhoods.</p>
+                <h3 style="color: var(--neon-teal); margin-bottom: 15px; font-size: 1.3rem;">🤝 Community Service</h3>
+                <p style="color: #bbb; line-height: 1.6;">School outreach programs and volunteer opportunities to make a tangible impact in local neighborhoods.</p>
             </div>
             <div class="glass-card">
-                <h3 style="color: var(--neon-teal);">🎯 Leadership Training</h3>
-                <p>Transformative sessions cultivating essential leadership skills and emotional intelligence for ambassadors.</p>
+                <h3 style="color: var(--neon-teal); margin-bottom: 15px; font-size: 1.3rem;">🎯 Leadership Training</h3>
+                <p style="color: #bbb; line-height: 1.6;">Transformative sessions cultivating essential leadership skills and emotional intelligence for ambassadors.</p>
             </div>
         </div>
     </section>
@@ -256,8 +306,37 @@
     <section id="resources">
         <div class="resource-banner">
             <h3>Mental Health Resource Hub</h3>
-            <p style="color: #e0e0e0; margin-bottom: 30px; font-size: 1.1rem;">Access our latest materials, journaling prompts, self-help toolkits, and official blueprints.</p>
-            <a href="https://res.cloudinary.com/doxfhckdx/image/upload/v1778670168/inner_compass_docs/xup626au2n0c8l5allvm.pdf" target="_blank" class="btn-glow" style="background: var(--soft-white); color: var(--deep-blue); border: none;">Download Official Blueprint (PDF)</a>
+            <p style="color: #e0e0e0; font-size: 1.1rem; max-width: 700px; margin: 0 auto;">Access our complete library of mental health materials, journaling prompts, self-help toolkits, and official blueprints.</p>
+            
+            <div class="resource-buttons">
+                <a href="https://res.cloudinary.com/doxfhckdx/image/upload/v1778670168/inner_compass_docs/xup626au2n0c8l5allvm.pdf" target="_blank" class="btn-glow" style="background: transparent; color: var(--soft-white); border: 2px solid var(--soft-white);">Download Blueprint (PDF)</a>
+                
+                <a href="https://drive.google.com/drive/folders/1J3PkAlAbPQRFXikwYcoY3VFdto3Fpi_l" target="_blank" class="btn-glow" style="background: var(--soft-white); color: var(--deep-blue); border: none; font-weight: 800;">📂 Open Drive Library</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="section-title">
+            <h2>Get In Touch</h2>
+            <p>We are always here. Reach out to partner, volunteer, or just talk.</p>
+        </div>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+            <div class="glass-card" style="text-align: center;">
+                <h3 style="font-size: 2.5rem; margin-bottom: 10px;">📍</h3>
+                <h3 style="color: var(--soft-white); margin-bottom: 10px;">Headquarters</h3>
+                <p style="color: #bbb; line-height: 1.6;">No. 25 Zone E, Hajj Camp Road, <br> Ilorin, Kwara State, Nigeria</p>
+            </div>
+            <div class="glass-card" style="text-align: center;">
+                <h3 style="font-size: 2.5rem; margin-bottom: 10px;">📧</h3>
+                <h3 style="color: var(--soft-white); margin-bottom: 10px;">Email Us</h3>
+                <p style="color: #bbb; line-height: 1.6;"><a href="mailto:Innercompassproject25@gmail.com" style="color: var(--soft-gold); text-decoration: none;">Innercompassproject25@gmail.com</a></p>
+            </div>
+            <div class="glass-card" style="text-align: center;">
+                <h3 style="font-size: 2.5rem; margin-bottom: 10px;">📱</h3>
+                <h3 style="color: var(--soft-white); margin-bottom: 10px;">Call / WhatsApp</h3>
+                <p style="color: #bbb; line-height: 1.6;">08145739207 <br> 07015820935</p>
+            </div>
         </div>
     </section>
 
