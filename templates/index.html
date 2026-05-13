@@ -8,28 +8,17 @@
     <style>
         /* --- BRANDING & DESIGN SYSTEM --- */
         :root {
-            --deep-blue: #0D3B66;
-            --teal-green: #2A9D8F;
-            --soft-white: #F8F9FA;
-            --dark-navy: #1B263B;
-            --soft-gold: #E9C46A;
-            --neon-teal: #4FFFD5;
-            
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --deep-blue: #0D3B66; --teal-green: #2A9D8F; --soft-white: #F8F9FA;
+            --dark-navy: #1B263B; --soft-gold: #E9C46A; --neon-teal: #4FFFD5;
+            --glass-bg: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--dark-navy);
-            color: var(--soft-white);
-            overflow-x: hidden;
-            /* Futuristic Background Gradient */
-            background-image: radial-gradient(circle at 15% 50%, rgba(13, 59, 102, 0.8), transparent 50%), 
-                              radial-gradient(circle at 85% 30%, rgba(42, 157, 143, 0.4), transparent 50%);
+            font-family: 'Inter', sans-serif; background-color: var(--dark-navy); color: var(--soft-white); overflow-x: hidden;
+            background-image: radial-gradient(circle at 15% 50%, rgba(13, 59, 102, 0.8), transparent 50%), radial-gradient(circle at 85% 30%, rgba(42, 157, 143, 0.4), transparent 50%);
             background-attachment: fixed;
         }
 
@@ -38,36 +27,17 @@
         /* --- ANNOUNCEMENT BAR --- */
         .announcement-bar {
             background: linear-gradient(90deg, var(--deep-blue), var(--teal-green));
-            color: var(--soft-white);
-            text-align: center;
-            padding: 8px 5%;
-            font-size: 0.85rem;
-            font-weight: 500;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1001;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            letter-spacing: 0.5px;
+            text-align: center; padding: 8px 5%; font-size: 0.85rem; font-weight: 500;
+            position: fixed; top: 0; width: 100%; z-index: 1001; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
-        .announcement-bar a {
-            color: var(--soft-gold);
-            text-decoration: none;
-            margin-left: 10px;
-            font-weight: 600;
-            border-bottom: 1px dashed var(--soft-gold);
-        }
+        .announcement-bar a { color: var(--soft-gold); text-decoration: none; margin-left: 10px; font-weight: 600; border-bottom: 1px dashed var(--soft-gold); }
 
-        /* --- GLASSMORPHISM NAVBAR --- */
+        /* --- NAVBAR --- */
         nav {
-            position: fixed;
-            top: 35px; /* Pushed down to make room for announcement bar */
-            width: 100%; z-index: 1000;
+            position: fixed; top: 35px; width: 100%; z-index: 1000;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 5%;
-            background: rgba(27, 38, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 5%; background: rgba(27, 38, 59, 0.7);
+            backdrop-filter: blur(12px); border-bottom: 1px solid var(--glass-border);
         }
         .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--soft-white); }
         .brand img { height: 45px; border-radius: 8px; }
@@ -78,134 +48,79 @@
         .nav-links a:hover { color: var(--neon-teal); text-shadow: 0 0 8px var(--neon-teal); }
         
         .btn-glow {
-            background: transparent;
-            color: var(--neon-teal);
-            border: 1px solid var(--neon-teal);
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px rgba(79, 255, 213, 0.2);
+            background: transparent; color: var(--neon-teal); border: 1px solid var(--neon-teal);
+            padding: 8px 20px; border-radius: 30px; font-family: 'Poppins', sans-serif; font-weight: 600; text-decoration: none; transition: all 0.3s ease;
         }
-        .btn-glow:hover {
-            background: var(--neon-teal);
-            color: var(--dark-navy);
-            box-shadow: 0 0 20px var(--neon-teal);
-        }
+        .btn-glow:hover { background: var(--neon-teal); color: var(--dark-navy); box-shadow: 0 0 20px var(--neon-teal); }
 
-        /* --- 1. HERO SECTION --- */
+        /* --- HERO SECTION --- */
         .hero {
-            height: 100vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; padding: 0 5%;
-            position: relative;
-            margin-top: 30px; 
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 0 5%; position: relative; margin-top: 30px; 
         }
         .hero h1 {
-            font-size: 4.5rem; font-weight: 800;
-            background: linear-gradient(90deg, var(--soft-white), var(--neon-teal));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-            animation: float 6s ease-in-out infinite;
+            font-size: 4.5rem; font-weight: 800; background: linear-gradient(90deg, var(--soft-white), var(--neon-teal));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; animation: float 6s ease-in-out infinite;
         }
         .hero h3 { color: var(--soft-gold); font-weight: 400; font-size: 1.5rem; margin-bottom: 20px; }
         .hero p { max-width: 600px; color: #ccc; font-size: 1.1rem; margin-bottom: 40px; line-height: 1.6; }
         .hero-buttons { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
 
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
 
         /* --- MOOD WIDGET --- */
         .mood-widget {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            padding: 20px 40px;
-            border-radius: 50px;
-            display: inline-flex;
-            align-items: center;
-            gap: 20px;
-            margin-top: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border);
+            padding: 20px 40px; border-radius: 50px; display: inline-flex; align-items: center; gap: 20px; margin-top: 40px;
         }
         .mood-widget p { margin: 0; font-family: 'Poppins'; font-weight: 600; color: var(--neon-teal); }
         .mood-emojis span { font-size: 1.8rem; cursor: pointer; transition: 0.3s; margin: 0 5px; }
         .mood-emojis span:hover { transform: scale(1.3); filter: drop-shadow(0 0 10px var(--soft-gold)); }
 
-        /* --- LAYOUT UTILITIES --- */
+        /* POPUP MODAL FOR MOOD */
+        .mood-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px);
+        }
+        .mood-content {
+            background: rgba(27, 38, 59, 0.95); border: 1px solid var(--neon-teal); padding: 40px;
+            border-radius: 20px; text-align: center; max-width: 400px; width: 90%; box-shadow: 0 0 30px rgba(79, 255, 213, 0.2);
+        }
+        .mood-content h3 { font-size: 3rem; margin-bottom: 15px; }
+        .mood-content p { font-size: 1.1rem; margin-bottom: 25px; line-height: 1.5; }
+
+        /* --- LAYOUT UTILITIES & GLASS CARDS --- */
         section { padding: 100px 5%; max-width: 1300px; margin: 0 auto; }
         .section-title { text-align: center; margin-bottom: 60px; }
         .section-title h2 { font-size: 2.5rem; color: var(--neon-teal); margin-bottom: 15px; }
         .section-title p { color: #aaa; max-width: 600px; margin: 0 auto; }
 
-        /* --- GLASS CARDS (GRID) --- */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
         .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            padding: 40px 30px;
-            border-radius: 20px;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
+            background: var(--glass-bg); backdrop-filter: blur(16px); border: 1px solid var(--glass-border);
+            padding: 40px 30px; border-radius: 20px; transition: all 0.4s ease;
         }
-        .glass-card::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: skewX(-20deg); transition: 0.5s;
-        }
-        .glass-card:hover::before { left: 150%; }
-        .glass-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(79, 255, 213, 0.15);
-            border-color: rgba(79, 255, 213, 0.5);
-        }
+        .glass-card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(79, 255, 213, 0.15); border-color: rgba(79, 255, 213, 0.5); }
 
-        /* --- RESOURCE HUB --- */
-        .resource-banner {
-            background: linear-gradient(135deg, var(--deep-blue), var(--teal-green));
-            border-radius: 20px; padding: 50px; text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            position: relative; overflow: hidden;
-        }
-        .resource-banner h3 { font-size: 2.2rem; margin-bottom: 20px; color: var(--soft-white); font-weight: 800;}
-        .resource-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
+        /* --- LIVE STATS BANNER --- */
+        .stats-banner { background: rgba(0,0,0,0.3); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); padding: 50px 5%; margin-top: -20px;}
+        .stat-item h2 { font-size: 3.5rem; color: var(--neon-teal); margin-bottom: 5px; }
+        .stat-item p { color: var(--soft-gold); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* --- FLOATING HELP BUTTON --- */
+        /* --- FLOATING HELP & FOOTER --- */
         .floating-help-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--neon-teal);
-            color: var(--dark-navy);
-            padding: 15px 25px;
-            border-radius: 30px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 800;
-            text-decoration: none;
-            box-shadow: 0 5px 20px rgba(79, 255, 213, 0.4);
-            z-index: 1000;
-            transition: transform 0.3s ease;
+            position: fixed; bottom: 30px; right: 30px; background: var(--neon-teal); color: var(--dark-navy);
+            padding: 15px 25px; border-radius: 30px; font-family: 'Poppins', sans-serif; font-weight: 800; text-decoration: none;
+            box-shadow: 0 5px 20px rgba(79, 255, 213, 0.4); z-index: 1000; transition: 0.3s ease;
         }
         .floating-help-btn:hover { transform: scale(1.05) translateY(-5px); }
 
-        /* --- FOOTER --- */
-        footer {
-            background: #0a1626; padding: 60px 5% 30px; text-align: center;
-            border-top: 1px solid var(--glass-border); margin-top: 50px;
-        }
-        .footer-quote { font-family: 'Poppins'; font-style: italic; color: var(--neon-teal); font-size: 1.2rem; margin-bottom: 30px; }
+        footer { background: #0a1626; padding: 60px 5% 30px; text-align: center; border-top: 1px solid var(--glass-border); margin-top: 50px; }
         
         /* --- MOBILE --- */
-        .mobile-menu-btn { display: none; background: none; border: none; color: var(--neon-teal); font-size: 2rem; }
+        .mobile-menu-btn { display: none; background: none; border: none; color: var(--neon-teal); font-size: 2rem; cursor: pointer;}
         @media (max-width: 768px) {
-            .nav-links { display: none; }
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; right: 5%; background: rgba(27, 38, 59, 0.95); padding: 20px; border-radius: 10px; gap: 15px; border: 1px solid var(--neon-teal);}
             .mobile-menu-btn { display: block; }
             .hero h1 { font-size: 3rem; }
             .mood-widget { flex-direction: column; text-align: center; padding: 20px; }
@@ -222,19 +137,18 @@
     <nav>
         <a href="#" class="brand">
             <img src="https://res.cloudinary.com/doxfhckdx/image/upload/v1778669710/inner_compass_images/p0vgkf1k2qhgavssave1.jpg" alt="ICP Logo">
-            <div class="brand-text">
-                <h1>Inner Compass</h1>
-            </div>
+            <div class="brand-text"><h1>Inner Compass</h1></div>
         </a>
-        <div class="nav-links">
+        <div class="nav-links" id="navMenu">
             <a href="#about">About</a>
             <a href="#services">Programs</a>
+            <a href="#team">Team</a>
             <a href="#resources">Resources</a>
             <a href="#contact">Contact</a>
             <a href="/login" class="btn-glow" style="margin-left: 15px;">Log In</a>
             <a href="/signup" class="btn-glow" style="background: var(--neon-teal); color: var(--dark-navy);">Join Us</a>
         </div>
-        <button class="mobile-menu-btn">☰</button>
+        <button class="mobile-menu-btn" id="mobileToggle">☰</button>
     </nav>
 
     <a href="mailto:Innercompassproject25@gmail.com" class="floating-help-btn">Need Help? 💬</a>
@@ -242,11 +156,11 @@
     <header class="hero">
         <h3>You are not alone.</h3>
         <h1>Find Your True North</h1>
-        <p>A student-led movement promoting mental health awareness, emotional well-being, and supportive communities. Understand yourself, support others, and grow emotionally.</p>
+        <p>A student-led movement promoting mental health awareness, emotional well-being, and supportive communities.</p>
         
         <div class="hero-buttons">
-            <a href="/signup" class="btn-glow" style="background: var(--neon-teal); color: var(--dark-navy); padding: 12px 30px; font-size: 1.1rem;">Join The Community</a>
-            <a href="#resources" class="btn-glow" style="padding: 12px 30px; font-size: 1.1rem;">Explore Resources</a>
+            <a href="/signup" class="btn-glow" style="background: var(--neon-teal); color: var(--dark-navy); padding: 12px 30px;">Join The Community</a>
+            <a href="#resources" class="btn-glow" style="padding: 12px 30px;">Explore Resources</a>
         </div>
 
         <div class="mood-widget">
@@ -257,6 +171,14 @@
         </div>
     </header>
 
+    <div class="stats-banner">
+        <div class="grid" style="text-align: center;">
+            <div class="stat-item"><h2 class="counter" data-target="250">0</h2><p>Community Members</p></div>
+            <div class="stat-item"><h2 class="counter" data-target="15">0</h2><p>Outreach Programs</p></div>
+            <div class="stat-item"><h2 class="counter" data-target="1000">0</h2><p>Students Reached</p></div>
+        </div>
+    </div>
+
     <section id="about">
         <div class="section-title">
             <h2>Our Mission</h2>
@@ -265,88 +187,140 @@
         <div class="grid">
             <div class="glass-card">
                 <h3 style="color: var(--soft-gold); margin-bottom: 15px; font-size: 1.3rem;">🧭 Guidance</h3>
-                <p style="color: #bbb; line-height: 1.6;">Helping individuals find clarity and purpose on their journey to mental wellness through structured mentorship and dialogue.</p>
+                <p style="color: #bbb; line-height: 1.6;">Helping individuals find clarity and purpose on their journey to mental wellness through structured mentorship.</p>
             </div>
             <div class="glass-card">
                 <h3 style="color: var(--soft-gold); margin-bottom: 15px; font-size: 1.3rem;">💙 Community</h3>
                 <p style="color: #bbb; line-height: 1.6;">Building strong networks of support and understanding among members and partners. Empathy is our foundation.</p>
             </div>
-            <div class="glass-card">
-                <h3 style="color: var(--soft-gold); margin-bottom: 15px; font-size: 1.3rem;">🌱 Growth</h3>
-                <p style="color: #bbb; line-height: 1.6;">Fostering emotional resilience, leadership development, and personal growth in a safe, futuristic digital space.</p>
-            </div>
         </div>
     </section>
 
     <section id="services">
-        <div class="section-title">
-            <h2>What We Do</h2>
-            <p>Interactive programs designed to educate, support, and empower.</p>
-        </div>
+        <div class="section-title"><h2>What We Do</h2><p>Interactive programs designed to educate, support, and empower.</p></div>
         <div class="grid">
-            <div class="glass-card">
-                <h3 style="color: var(--neon-teal); margin-bottom: 15px; font-size: 1.3rem;">🧠 Webinar Series</h3>
-                <p style="color: #bbb; line-height: 1.6;">Engaging virtual discussions featuring expert speakers delving into mental health and collective development.</p>
+            <div class="glass-card"><h3 style="color: var(--neon-teal);">🧠 Webinar Series</h3><p style="color: #bbb;">Engaging virtual discussions featuring expert speakers.</p></div>
+            <div class="glass-card"><h3 style="color: var(--neon-teal);">💬 Dialogue Sessions</h3><p style="color: #bbb;">Safe spaces for anonymous stories and peer-to-peer engagement.</p></div>
+            <div class="glass-card"><h3 style="color: var(--neon-teal);">🤝 Community Service</h3><p style="color: #bbb;">School outreach programs to make a tangible impact.</p></div>
+            <div class="glass-card"><h3 style="color: var(--neon-teal);">🎯 Leadership Training</h3><p style="color: #bbb;">Transformative sessions cultivating essential leadership skills.</p></div>
+        </div>
+    </section>
+
+    <section id="team">
+        <div class="section-title"><h2>The Executive Team</h2><p>The minds driving the mission forward.</p></div>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            
+            <div class="glass-card" style="text-align: center; padding: 30px;">
+                <div style="font-size: 4rem; margin-bottom: 15px;">👨🏽‍💻</div>
+                <h3 style="color: var(--soft-white); margin-bottom: 5px;">Bilal Olamilekan</h3>
+                <p style="color: var(--soft-gold); font-weight: bold; margin-bottom: 10px;">Executive Director / Founder</p>
+                <p style="color: #bbb; font-size: 0.85rem;">Leading the vision, strategy, and overall growth of the movement.</p>
             </div>
-            <div class="glass-card">
-                <h3 style="color: var(--neon-teal); margin-bottom: 15px; font-size: 1.3rem;">💬 Dialogue Sessions</h3>
-                <p style="color: #bbb; line-height: 1.6;">Safe spaces for anonymous stories, testimonials, and peer-to-peer engagement to break the stigma.</p>
+
+            <div class="glass-card" style="text-align: center; padding: 30px;">
+                <div style="font-size: 4rem; margin-bottom: 15px;">👥</div>
+                <h3 style="color: var(--soft-white); margin-bottom: 5px;">Programs Director</h3>
+                <p style="color: var(--soft-gold); font-weight: bold; margin-bottom: 10px;">Executive Leadership</p>
+                <p style="color: #bbb; font-size: 0.85rem;">Oversees all organizational programs, initiatives, and community engagement.</p>
             </div>
-            <div class="glass-card">
-                <h3 style="color: var(--neon-teal); margin-bottom: 15px; font-size: 1.3rem;">🤝 Community Service</h3>
-                <p style="color: #bbb; line-height: 1.6;">School outreach programs and volunteer opportunities to make a tangible impact in local neighborhoods.</p>
+
+            <div class="glass-card" style="text-align: center; padding: 30px;">
+                <div style="font-size: 4rem; margin-bottom: 15px;">📱</div>
+                <h3 style="color: var(--soft-white); margin-bottom: 5px;">Communications Director</h3>
+                <p style="color: var(--soft-gold); font-weight: bold; margin-bottom: 10px;">Media & Comms</p>
+                <p style="color: #bbb; font-size: 0.85rem;">Leads public messaging, branding, and digital platforms.</p>
             </div>
-            <div class="glass-card">
-                <h3 style="color: var(--neon-teal); margin-bottom: 15px; font-size: 1.3rem;">🎯 Leadership Training</h3>
-                <p style="color: #bbb; line-height: 1.6;">Transformative sessions cultivating essential leadership skills and emotional intelligence for ambassadors.</p>
-            </div>
+            
         </div>
     </section>
 
     <section id="resources">
-        <div class="resource-banner">
-            <h3>Mental Health Resource Hub</h3>
-            <p style="color: #e0e0e0; font-size: 1.1rem; max-width: 700px; margin: 0 auto;">Access our complete library of mental health materials, journaling prompts, self-help toolkits, and official blueprints.</p>
-            
-            <div class="resource-buttons">
-                <a href="https://res.cloudinary.com/doxfhckdx/image/upload/v1778670168/inner_compass_docs/xup626au2n0c8l5allvm.pdf" target="_blank" class="btn-glow" style="background: transparent; color: var(--soft-white); border: 2px solid var(--soft-white);">Download Blueprint (PDF)</a>
-                
+        <div style="background: linear-gradient(135deg, var(--deep-blue), var(--teal-green)); border-radius: 20px; padding: 50px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.3);">
+            <h3 style="font-size: 2.2rem; margin-bottom: 20px; color: var(--soft-white); font-weight: 800;">Mental Health Resource Hub</h3>
+            <p style="color: #e0e0e0; font-size: 1.1rem; max-width: 700px; margin: 0 auto 30px;">Access our complete library of mental health materials, journaling prompts, self-help toolkits, and official blueprints.</p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://res.cloudinary.com/doxfhckdx/image/upload/v1778670168/inner_compass_docs/xup626au2n0c8l5allvm.pdf" target="_blank" class="btn-glow" style="background: transparent; color: var(--soft-white); border: 2px solid var(--soft-white);">Download Blueprint</a>
                 <a href="https://drive.google.com/drive/folders/1J3PkAlAbPQRFXikwYcoY3VFdto3Fpi_l" target="_blank" class="btn-glow" style="background: var(--soft-white); color: var(--deep-blue); border: none; font-weight: 800;">📂 Open Drive Library</a>
             </div>
         </div>
     </section>
 
     <section id="contact">
-        <div class="section-title">
-            <h2>Get In Touch</h2>
-            <p>We are always here. Reach out to partner, volunteer, or just talk.</p>
-        </div>
-        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-            <div class="glass-card" style="text-align: center;">
-                <h3 style="font-size: 2.5rem; margin-bottom: 10px;">📍</h3>
-                <h3 style="color: var(--soft-white); margin-bottom: 10px;">Headquarters</h3>
-                <p style="color: #bbb; line-height: 1.6;">No. 25 Zone E, Hajj Camp Road, <br> Ilorin, Kwara State, Nigeria</p>
-            </div>
-            <div class="glass-card" style="text-align: center;">
-                <h3 style="font-size: 2.5rem; margin-bottom: 10px;">📧</h3>
-                <h3 style="color: var(--soft-white); margin-bottom: 10px;">Email Us</h3>
-                <p style="color: #bbb; line-height: 1.6;"><a href="mailto:Innercompassproject25@gmail.com" style="color: var(--soft-gold); text-decoration: none;">Innercompassproject25@gmail.com</a></p>
-            </div>
-            <div class="glass-card" style="text-align: center;">
-                <h3 style="font-size: 2.5rem; margin-bottom: 10px;">📱</h3>
-                <h3 style="color: var(--soft-white); margin-bottom: 10px;">Call / WhatsApp</h3>
-                <p style="color: #bbb; line-height: 1.6;">08145739207 <br> 07015820935</p>
-            </div>
+        <div class="section-title"><h2>Get In Touch</h2><p>We are always here. Reach out to partner, volunteer, or just talk.</p></div>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); text-align: center;">
+            <div class="glass-card"><h3 style="font-size: 2.5rem;">📍</h3><h3 style="color: var(--soft-white);">Headquarters</h3><p style="color: #bbb;">Ilorin, Kwara State, Nigeria</p></div>
+            <div class="glass-card"><h3 style="font-size: 2.5rem;">📧</h3><h3 style="color: var(--soft-white);">Email Us</h3><p><a href="mailto:Innercompassproject25@gmail.com" style="color: var(--soft-gold); text-decoration: none;">Innercompassproject25@gmail.com</a></p></div>
+            <div class="glass-card"><h3 style="font-size: 2.5rem;">📱</h3><h3 style="color: var(--soft-white);">Call</h3><p style="color: #bbb;">08145739207 <br> 07015820935</p></div>
         </div>
     </section>
 
-    <footer>
-        <div class="footer-quote">
-            "Together, we are building safer spaces for minds to grow."
+    <div class="mood-modal" id="moodModal">
+        <div class="mood-content">
+            <h3 id="moodIcon">😊</h3>
+            <p id="moodMessage">Message goes here.</p>
+            <button class="btn-glow" onclick="document.getElementById('moodModal').style.display='none'">Close</button>
         </div>
+    </div>
+
+    <footer>
+        <div style="font-family: 'Poppins'; font-style: italic; color: var(--neon-teal); font-size: 1.2rem; margin-bottom: 30px;">"Together, we are building safer spaces for minds to grow."</div>
         <p style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">The Inner Compass Project | Youth Mental Health Advocacy</p>
         <p style="color: #444; font-size: 0.8rem;">&copy; 2026 All Rights Reserved.</p>
     </footer>
 
+    <script>
+        // 1. Mobile Menu Logic
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navMenu = document.getElementById('navMenu');
+        mobileToggle.addEventListener('click', () => {
+            navMenu.style.display = (navMenu.style.display === 'flex') ? 'none' : 'flex';
+        });
+
+        // 2. Mood Widget Logic
+        const emojis = document.querySelectorAll('.mood-emojis span');
+        const moodModal = document.getElementById('moodModal');
+        const moodMessage = document.getElementById('moodMessage');
+        const moodIcon = document.getElementById('moodIcon');
+
+        emojis.forEach(emoji => {
+            emoji.addEventListener('click', (e) => {
+                const mood = e.target.innerText;
+                moodIcon.innerText = mood;
+                if(mood === '😊' || mood === '😌') {
+                    moodMessage.innerText = "We're so glad you're having a good day! Keep spreading that light, it makes a difference.";
+                } else if(mood === '😴') {
+                    moodMessage.innerText = "Rest is productive. Make sure to take breaks, hydrate, and recharge your battery today.";
+                } else {
+                    moodMessage.innerText = "It is completely okay to feel overwhelmed. Remember to breathe. We are glad you are here, and you don't have to walk this path alone.";
+                }
+                moodModal.style.display = 'flex';
+            });
+        });
+
+        // 3. Animated Stats Counter Logic
+        const counters = document.querySelectorAll('.counter');
+        const speed = 100;
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const inc = target / speed;
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + inc);
+                    setTimeout(animateCounters, 30);
+                } else {
+                    counter.innerText = target + "+";
+                }
+            });
+        };
+        // Start animation when user scrolls to it
+        window.addEventListener('scroll', () => {
+            const statsSection = document.querySelector('.stats-banner');
+            const sectionPos = statsSection.getBoundingClientRect().top;
+            const screenPos = window.innerHeight;
+            if(sectionPos < screenPos) { animateCounters(); }
+        });
+    </script>
 </body>
 </html>
+
