@@ -24,6 +24,10 @@
 
         h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; }
 
+        /* --- SCROLL ANIMATIONS --- */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
         /* --- ANNOUNCEMENT BAR --- */
         .announcement-bar {
             background: linear-gradient(90deg, var(--deep-blue), var(--teal-green));
@@ -49,7 +53,7 @@
         
         .btn-glow {
             background: transparent; color: var(--neon-teal); border: 1px solid var(--neon-teal);
-            padding: 8px 20px; border-radius: 30px; font-family: 'Poppins', sans-serif; font-weight: 600; text-decoration: none; transition: all 0.3s ease; cursor: pointer;
+            padding: 8px 20px; border-radius: 30px; font-family: 'Poppins', sans-serif; font-weight: 600; text-decoration: none; transition: all 0.3s ease; cursor: pointer; display: inline-block; text-align: center;
         }
         .btn-glow:hover { background: var(--neon-teal); color: var(--dark-navy); box-shadow: 0 0 20px var(--neon-teal); }
 
@@ -121,6 +125,16 @@
         .quote-mark { font-size: 3rem; color: var(--teal-green); margin-bottom: -10px; font-family: serif; }
         .testimonial-text { font-style: italic; color: #ddd; margin-bottom: 20px; line-height: 1.6; }
 
+        /* --- FULL CONTACT FORM --- */
+        .contact-form { display: flex; flex-direction: column; gap: 15px; }
+        .contact-form input, .contact-form textarea {
+            width: 100%; padding: 15px; border-radius: 10px; border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05); color: var(--soft-white); font-family: 'Inter', sans-serif;
+            outline: none; transition: 0.3s;
+        }
+        .contact-form input::placeholder, .contact-form textarea::placeholder { color: #888; }
+        .contact-form input:focus, .contact-form textarea:focus { border-color: var(--neon-teal); background: rgba(255, 255, 255, 0.1); }
+
         /* --- FLOATING AI BUTTON --- */
         .floating-ai-btn {
             position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, var(--teal-green), var(--deep-blue));
@@ -134,7 +148,7 @@
         /* --- FOOTER & NEWSLETTER --- */
         footer { background: #0a1626; padding: 60px 5% 30px; text-align: center; border-top: 1px solid var(--glass-border); margin-top: 50px; }
         .newsletter { max-width: 500px; margin: 0 auto 40px; background: var(--glass-bg); padding: 30px; border-radius: 15px; border: 1px solid var(--glass-border); }
-        .newsletter input { width: 65%; padding: 12px; border-radius: 25px 0 0 25px; border: none; outline: none; padding-left: 20px; font-family: 'Inter'; }
+        .newsletter input { width: 65%; padding: 12px; border-radius: 25px 0 0 25px; border: none; outline: none; padding-left: 20px; font-family: 'Inter'; background: var(--soft-white); color: var(--dark-navy);}
         .newsletter button { width: 35%; padding: 12px; border-radius: 0 25px 25px 0; border: none; background: var(--neon-teal); color: var(--dark-navy); font-weight: bold; cursor: pointer; transition: 0.3s; }
         .newsletter button:hover { background: var(--soft-gold); }
         
@@ -205,16 +219,16 @@
     </div>
 
     <header class="hero">
-        <h3>You are not alone.</h3>
-        <h1>Find Your True North</h1>
-        <p>A student-led movement promoting mental health awareness, emotional well-being, and supportive communities.</p>
+        <h3 class="reveal">You are not alone.</h3>
+        <h1 class="reveal">Find Your True North</h1>
+        <p class="reveal">A student-led movement promoting mental health awareness, emotional well-being, and supportive communities.</p>
         
-        <div class="hero-buttons">
+        <div class="hero-buttons reveal">
             <a href="/signup" class="btn-glow" style="background: var(--neon-teal); color: var(--dark-navy); padding: 12px 30px;">Join The Community</a>
             <button onclick="openModal('aiModal')" class="btn-glow" style="padding: 12px 30px;">Talk to AI Guide</button>
         </div>
 
-        <div class="mood-widget">
+        <div class="mood-widget reveal">
             <p>How are you feeling today?</p>
             <div class="mood-emojis">
                 <span>😊</span> <span>😌</span> <span>😴</span> <span>😥</span> <span>😔</span>
@@ -222,7 +236,7 @@
         </div>
     </header>
 
-    <div class="stats-banner">
+    <div class="stats-banner reveal">
         <div class="grid" style="text-align: center;">
             <div class="stat-item"><h2 class="counter" data-target="250">0</h2><p>Community Members</p></div>
             <div class="stat-item"><h2 class="counter" data-target="15">0</h2><p>Outreach Programs</p></div>
@@ -230,7 +244,7 @@
         </div>
     </div>
 
-    <section id="about">
+    <section id="about" class="reveal">
         <div class="section-title"><h2>Our Mission</h2><p>Building safer spaces for minds to grow through technology, empathy, and connection.</p></div>
         <div class="grid">
             <div class="glass-card"><h3 style="color: var(--soft-gold); margin-bottom: 15px; font-size: 1.3rem;">🧭 Guidance</h3><p style="color: #bbb; line-height: 1.6;">Helping individuals find clarity and purpose on their journey to mental wellness through structured mentorship.</p></div>
@@ -238,7 +252,7 @@
         </div>
     </section>
 
-    <section id="services">
+    <section id="services" class="reveal">
         <div class="section-title"><h2>What We Do</h2><p>Interactive programs designed to educate, support, and empower.</p></div>
         <div class="grid">
             <div class="glass-card"><h3 style="color: var(--neon-teal);">🧠 Webinar Series</h3><p style="color: #bbb;">Engaging virtual discussions featuring expert speakers.</p></div>
@@ -247,7 +261,7 @@
         </div>
     </section>
 
-    <section id="testimonials" style="background: rgba(0,0,0,0.2); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">
+    <section id="testimonials" class="reveal" style="background: rgba(0,0,0,0.2); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">
         <div class="section-title"><h2>Community Voices</h2><p>Real stories from students discovering their True North.</p></div>
         <div class="grid">
             <div class="glass-card testimonial-card">
@@ -263,7 +277,7 @@
         </div>
     </section>
 
-    <section id="team">
+    <section id="team" class="reveal">
         <div class="section-title"><h2>Meet Our Leadership</h2><p>The visionaries driving the mission forward.</p></div>
         <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 800px; margin: 0 auto;">
             <div class="glass-card" style="text-align: center; padding: 30px;">
@@ -281,24 +295,43 @@
         </div>
     </section>
 
-    <section id="resources">
+    <section id="resources" class="reveal">
         <div style="background: linear-gradient(135deg, var(--deep-blue), var(--teal-green)); border-radius: 20px; padding: 50px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.3);">
             <h3 style="font-size: 2.2rem; margin-bottom: 20px; color: var(--soft-white); font-weight: 800;">Mental Health Resource Hub</h3>
             <p style="color: #e0e0e0; font-size: 1.1rem; max-width: 700px; margin: 0 auto 30px;">Access our complete library of mental health materials, journaling prompts, and official blueprints.</p>
             <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                <a href="https://res.cloudinary.com/doxfhckdx/image/upload/v1778670168/inner_compass_docs/xup626au2n0c8l5allvm.pdf" target="_blank" class="btn-glow" style="background: transparent; color: var(--soft-white); border: 2px solid var(--soft-white);">Download Blueprint</a>
+                <a href="https://drive.google.com/drive/folders/1J3PkAlAbPQRFXikwYcoY3VFdto3Fpi_l" target="_blank" class="btn-glow" style="background: transparent; color: var(--soft-white); border: 2px solid var(--soft-white);">Download Blueprint</a>
                 <a href="https://drive.google.com/drive/folders/1J3PkAlAbPQRFXikwYcoY3VFdto3Fpi_l" target="_blank" class="btn-glow" style="background: var(--soft-white); color: var(--deep-blue); border: none; font-weight: 800;">📂 Open Drive Library</a>
             </div>
         </div>
     </section>
 
-    <footer id="contact">
-        <div class="newsletter">
+    <section id="contact" class="reveal">
+        <div class="section-title"><h2>Get In Touch</h2><p>We are always here. Reach out to partner, volunteer, or just talk.</p></div>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); text-align: center; margin-bottom: 30px;">
+            <div class="glass-card"><h3 style="font-size: 2.5rem; margin-bottom: 10px;">📍</h3><h3 style="color: var(--soft-white); margin-bottom: 10px;">Headquarters</h3><p style="color: #bbb; line-height: 1.6;">No. 25 Zone E, Hajj Camp Road, <br> Ilorin, Kwara State</p></div>
+            <div class="glass-card"><h3 style="font-size: 2.5rem; margin-bottom: 10px;">📧</h3><h3 style="color: var(--soft-white); margin-bottom: 10px;">Email Us</h3><p style="color: #bbb; line-height: 1.6;"><a href="mailto:Innercompassproject25@gmail.com" style="color: var(--soft-gold); text-decoration: none;">Innercompassproject25@gmail.com</a></p></div>
+            <div class="glass-card"><h3 style="font-size: 2.5rem; margin-bottom: 10px;">📱</h3><h3 style="color: var(--soft-white); margin-bottom: 10px;">Call / WhatsApp</h3><p style="color: #bbb; line-height: 1.6;">08145739207 <br> 07015820935</p></div>
+        </div>
+
+        <div class="glass-card" style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <h3 style="color: var(--neon-teal); margin-bottom: 20px;">Send a Direct Message</h3>
+            <form action="https://formspree.io/f/xzdowlqq" method="POST" class="contact-form">
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email Address" required>
+                <textarea name="message" placeholder="How can we help, collaborate, or support you?" rows="5" required></textarea>
+                <button type="submit" class="btn-glow" style="width: 100%; font-size: 1.1rem; padding: 12px;">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="newsletter reveal">
             <h3 style="color: var(--neon-teal); margin-bottom: 10px;">Join Our Newsletter</h3>
             <p style="color: #bbb; margin-bottom: 20px; font-size: 0.9rem;">Stay updated on our latest webinars and mental health campaigns. Receive updates directly to your inbox.</p>
             
             <form action="https://formspree.io/f/xzdowlqq" method="POST" style="display: flex; flex-wrap: wrap;">
-                <input type="email" name="email" placeholder="Enter your email address" required>
+                <input type="email" name="newsletter_email" placeholder="Enter your email address" required>
                 <button type="submit">Subscribe</button>
             </form>
         </div>
@@ -356,10 +389,31 @@
                 else { counter.innerText = target + "+"; }
             });
         };
+        
+        // 5. Scroll Reveal Animations
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+
         window.addEventListener('scroll', () => {
+            // Trigger stats
             const statsSection = document.querySelector('.stats-banner');
-            if(statsSection.getBoundingClientRect().top < window.innerHeight) { animateCounters(); }
+            if(statsSection && statsSection.getBoundingClientRect().top < window.innerHeight) { animateCounters(); }
+            // Trigger reveals
+            reveal();
         });
+        
+        // Trigger reveal on load
+        reveal();
     </script>
 </body>
 </html>
+
