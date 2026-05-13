@@ -1,80 +1,44 @@
 import os
-from flask import Flask, request, jsonify, send_from_directory
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask import Flask, render_template, request
+import cloudinary
+import cloudinary.uploader
 
 app = Flask(__name__)
-CORS(app) # Enables cross-origin requests
 
-# Database Configuration 
-db_url = os.environ.get('DATABASE_URL', 'sqlite:///local_development.db')
+# This pulls the CLOUDINARY_URL automatically from Railway
+cloudinary.config(secure=True)
 
-# SQLAlchemy requires 'postgresql://' but some providers use 'postgres://'
-if db_url.startswith("postgres://"):
-    db_url = db_url.replace("postgres://", "postgresql://", 1)
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
 
-app.config['SQLALCHEMY_DATABASE_URI'] = db_url
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+def is_allowed(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-db = SQLAlchemy(app)
-
-# Updated Database Model for storing new members and executives
-class InnerCompassMember(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(150), nullable=False)
-    email = db.Column(db.String(150), nullable=False, unique=True)
-    role = db.Column(db.String(50), nullable=False) # 'Member' or 'Executive'
-    message = db.Column(db.Text, nullable=True)     # Optional message field
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-
-# Create tables if they don't exist
-with app.app_context():
-    db.create_all()
-
-# Route to serve the Frontend HTML
 @app.route('/')
-def index():
-    return send_from_directory('.', 'index.html')
+def home():
+    return "Inner Compass Project is Live! Visit /upload-page to upload files."
 
-# API Endpoint to handle form submissions
-@app.route('/api/join', methods=['POST'])
-def join_project():
-    data = request.json
-    name = data.get('name')
-    email = data.get('email')
-    role = data.get('role')
-    message = data.get('message', '') # Defaults to empty string if not provided
+@app.route('/upload-page')
+def upload_page():
+    return render_template('upload.html')
 
-    # Basic Validation
-    if not name or not email or not role:
-        return jsonify({'error': 'Please fill out all required fields.'}), 400
-
-    if role not in ['Member', 'Executive']:
-        return jsonify({'error': 'Invalid role selected.'}), 400
-
-    try:
-        # Check if email already registered
-        existing_user = InnerCompassMember.query.filter_by(email=email).first()
-        if existing_user:
-            return jsonify({'error': 'This email is already registered.'}), 409
-
-        # Save to PostgreSQL
-        new_member = InnerCompassMember(
-            name=name, 
-            email=email, 
-            role=role,
-            message=message
-        )
-        db.session.add(new_member)
-        db.session.commit()
+@app.route('/upload', methods=['POST'])
+def handle_upload():
+    file = request.files.get('file_to_upload')
+    
+    if file and is_allowed(file.filename):
+        # Sorts files: PDFs to docs folder, Images to images folder
+        folder_name = "inner_compass_docs" if file.filename.endswith('.pdf') else "inner_compass_images"
         
-        return jsonify({'message': 'Application recorded successfully.'}), 201
-
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': str(e)}), 500
-
-if __name__ == '__main__':
-    # Railway passes the PORT env variable automatically
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+        # Uploads the file from your phone to Cloudinary
+        result = cloudinary.uploader.upload(file, folder=folder_name)
+        
+        # Returns the link you need for your website
+        return f"""
+        <h3>Upload Successful!</h3>
+        <p>Copy this link to use in your code:</p>
+        <input type="text" value="{result['secure_url']}" style="width:100%;" readonly>
+        <br><br>
+        <a href="/upload-page">Upload another file</a>
+        """
+    
+    return "Error: Invalid file type. Use PNG, JPG, or PDF.", 400
