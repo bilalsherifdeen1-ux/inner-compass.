@@ -5,17 +5,14 @@ import cloudinary.uploader
 
 app = Flask(__name__)
 
-# This pulls the CLOUDINARY_URL automatically from Railway
-cloudinary.config(secure=True)
-
-ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
-
-def is_allowed(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+# SAFE CONFIG: Only configures if the variable exists
+cloudinary_url = os.environ.get('CLOUDINARY_URL')
+if cloudinary_url:
+    cloudinary.config(secure=True)
 
 @app.route('/')
 def home():
-    return "Inner Compass Project is Live! Visit /upload-page to upload files."
+    return "Inner Compass is running! Cloudinary is " + ("Connected" if cloudinary_url else "Not Connected")
 
 @app.route('/upload-page')
 def upload_page():
@@ -23,22 +20,19 @@ def upload_page():
 
 @app.route('/upload', methods=['POST'])
 def handle_upload():
+    if not cloudinary_url:
+        return "System Error: Cloudinary keys are missing in Railway Variables.", 500
+        
     file = request.files.get('file_to_upload')
-    
-    if file and is_allowed(file.filename):
-        # Sorts files: PDFs to docs folder, Images to images folder
-        folder_name = "inner_compass_docs" if file.filename.endswith('.pdf') else "inner_compass_images"
-        
-        # Uploads the file from your phone to Cloudinary
-        result = cloudinary.uploader.upload(file, folder=folder_name)
-        
-        # Returns the link you need for your website
-        return f"""
-        <h3>Upload Successful!</h3>
-        <p>Copy this link to use in your code:</p>
-        <input type="text" value="{result['secure_url']}" style="width:100%;" readonly>
-        <br><br>
-        <a href="/upload-page">Upload another file</a>
-        """
-    
-    return "Error: Invalid file type. Use PNG, JPG, or PDF.", 400
+    if file:
+        try:
+            result = cloudinary.uploader.upload(file, folder="inner_compass")
+            return f"Success! Link: {result['secure_url']}"
+        except Exception as e:
+            return f"Upload Failed: {str(e)}", 500
+    return "No file selected", 400
+
+if __name__ == "__main__":
+    # Important for Railway: it needs to bind to 0.0.0.0
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
