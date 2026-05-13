@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,23 +8,22 @@ import cloudinary.uploader
 
 app = Flask(__name__)
 
-# --- CONFIGURATION ---
-# The Secret Key encrypts the user's login session
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'fallback_development_key')
+# --- 1. SECURITY & DATABASE CONFIGURATION ---
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'InnerCompassSecureKey2026')
 
-# Fix Railway's postgres:// to postgresql:// for SQLAlchemy compatibility
+# Railway Database Fix (converts postgres:// to postgresql://)
 db_url = os.environ.get('DATABASE_URL', 'sqlite:///local.db')
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize Database and Login Manager
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
-login_manager.login_view = 'login' # Redirects here if not logged in
+login_manager.login_view = 'login'
 
-# Cloudinary Setup
+# --- 2. CLOUDINARY CONFIGURATION ---
 CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
 if CLOUDINARY_URL:
     try:
@@ -32,7 +31,7 @@ if CLOUDINARY_URL:
     except Exception:
         pass
 
-# --- DATABASE MODEL ---
+# --- 3. DATABASE MODEL (User Accounts) ---
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), nullable=False)
@@ -43,16 +42,16 @@ class User(UserMixin, db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Create tables before the first request
+# Create database tables automatically
 with app.app_context():
     db.create_all()
 
-# --- PUBLIC ROUTES ---
+# --- 4. PUBLIC ROUTES ---
 @app.route('/')
 def home():
     return render_template('index.html')
 
-# --- AUTHENTICATION ROUTES ---
+# --- 5. AUTHENTICATION LOGIC ---
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -60,20 +59,14 @@ def signup():
         email = request.form.get('email')
         password = request.form.get('password')
         
-        # Check if user already exists
-        user = User.query.filter_by(email=email).first()
-        if user:
-            return "Email already registered. Go back and log in.", 400
+        if User.query.filter_by(email=email).first():
+            return "Email already registered. Please log in.", 400
             
-        # Hash the password for maximum security
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        
-        # Create new user
         new_user = User(username=username, email=email, password_hash=hashed_password)
         db.session.add(new_user)
         db.session.commit()
         
-        # Log them in automatically
         login_user(new_user)
         return redirect(url_for('dashboard'))
         
@@ -84,15 +77,13 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        
         user = User.query.filter_by(email=email).first()
         
-        # Verify user and password
         if user and check_password_hash(user.password_hash, password):
             login_user(user)
             return redirect(url_for('dashboard'))
         else:
-            return "Invalid email or password. Go back and try again.", 401
+            return "Invalid email or password. Please try again.", 401
             
     return render_template('auth.html', action="login")
 
@@ -102,30 +93,30 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-# --- PROTECTED ROUTES (Members Only) ---
+# --- 6. MEMBER DASHBOARD ---
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return f"""
-    <div style='font-family: sans-serif; text-align: center; padding: 50px;'>
-        <h2 style='color: #195c70;'>Welcome to your True North, {current_user.username}!</h2>
-        <p>This is the private member portal. Only logged-in members can see this.</p>
-        <a href='/' style='padding: 10px 20px; background: #6bb274; color: white; text-decoration: none; border-radius: 5px;'>Back to Home</a>
-        <br><br>
-        <a href='/logout' style='color: #e11d48;'>Log Out</a>
-    </div>
-    """
+    return render_template('dashboard.html', username=current_user.username)
 
-# --- ADMIN UPLOAD ROUTE ---
+# --- 7. ADMIN UPLOAD SYSTEM ---
 @app.route('/upload-page')
 def upload_page():
-    return render_template('upload.html') # Assuming you kept your upload.html
+    return render_template('upload.html')
 
 @app.route('/upload', methods=['POST'])
 def handle_upload():
-    # ... (Keep your existing Cloudinary upload logic here) ...
-    pass
+    file = request.files.get('file_to_upload')
+    if file:
+        try:
+            folder = "inner_compass_docs" if file.filename.endswith('.pdf') else "inner_compass_images"
+            result = cloudinary.uploader.upload(file, folder=folder)
+            return f"<h3>Upload Successful!</h3><p>Link: {result['secure_url']}</p><a href='/upload-page'>Upload another</a>"
+        except Exception as e:
+            return f"Upload Error: {str(e)}"
+    return "No file selected", 400
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
