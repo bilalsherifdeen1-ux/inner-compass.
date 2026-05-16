@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}The Inner Compass Project{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+  {# Top bar — only when logged in #}
+  {% if logged_in %}
+  <div class="top-bar">
+    <span>Welcome back, <strong>{{ username }}</strong> 👋</span>
+    <div class="top-bar__links">
+      <a href="/dashboard">My Dashboard</a>
+      {% if is_admin %}<a href="/admin">Admin Panel</a>{% endif %}
+      <a href="/logout">Log Out</a>
+    </div>
+  </div>
+  {% endif %}
+
+  {% block nav %}
+  <nav class="nav" id="nav">
+    <a href="/" class="nav__logo">
+      <svg class="nav__compass" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="18" stroke="var(--green)" stroke-width="1.5"/>
+        <path d="M20 4 L23 18 L20 36 L17 18 Z" fill="var(--green)" opacity="0.9"/>
+        <path d="M4 20 L18 17 L36 20 L18 23 Z" fill="var(--teal)" opacity="0.9"/>
+        <circle cx="20" cy="20" r="3" fill="var(--green)"/>
+      </svg>
+      <span>Inner Compass</span>
+    </a>
+    <ul class="nav__links">
+      <li><a href="/#about">About</a></li>
+      <li><a href="/#services">Programs</a></li>
+      <li><a href="/#team">Leadership</a></li>
+      <li><a href="/resources">Resources</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+    {% if logged_in %}
+      <a href="/dashboard" class="nav__cta btn btn--primary">My Dashboard</a>
+    {% else %}
+      <a href="/login" class="btn btn--ghost nav__login">Log In</a>
+      <a href="/signup" class="nav__cta btn btn--primary">Join Us</a>
+    {% endif %}
+    <button class="nav__hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <button class="mobile-menu__close" id="mobile-close">✕</button>
+    <ul>
+      <li><a href="/#about"    onclick="closeMobileMenu()">About</a></li>
+      <li><a href="/#services" onclick="closeMobileMenu()">Programs</a></li>
+      <li><a href="/#team"     onclick="closeMobileMenu()">Leadership</a></li>
+      <li><a href="/resources" onclick="closeMobileMenu()">Resources</a></li>
+      <li><a href="/#contact"  onclick="closeMobileMenu()">Contact</a></li>
+      {% if logged_in %}
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li><a href="/logout">Log Out</a></li>
+      {% else %}
+        <li><a href="/login">Log In</a></li>
+        <li><a href="/signup" class="mobile-cta">Join Us</a></li>
+      {% endif %}
+    </ul>
+  </div>
+  {% endblock %}
+
+  {% block content %}{% endblock %}
+
+  {% block footer %}
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <div class="nav__logo" style="margin-bottom:.5rem">
+            <svg class="nav__compass" viewBox="0 0 40 40" fill="none">
+              <circle cx="20" cy="20" r="18" stroke="var(--green)" stroke-width="1.5"/>
+              <path d="M20 4 L23 18 L20 36 L17 18 Z" fill="var(--green)" opacity="0.9"/>
+              <path d="M4 20 L18 17 L36 20 L18 23 Z" fill="var(--teal)" opacity="0.9"/>
+              <circle cx="20" cy="20" r="3" fill="var(--green)"/>
+            </svg>
+            <span style="color:white">Inner Compass Project</span>
+          </div>
+          <p>Find Your True North</p>
+          <p style="font-size:.8rem;margin-top:.5rem">No. 25 Zone E, Hajj Camp Road,<br>Ilorin, Kwara State, Nigeria</p>
+        </div>
+        <div class="footer__links">
+          <strong>Navigate</strong>
+          <a href="/#about">About</a>
+          <a href="/#services">Programs</a>
+          <a href="/#team">Leadership</a>
+          <a href="/resources">Resources</a>
+          <a href="/#contact">Contact</a>
+        </div>
+        <div class="footer__links">
+          <strong>Account</strong>
+          {% if logged_in %}
+            <a href="/dashboard">My Dashboard</a>
+            <a href="/logout">Log Out</a>
+          {% else %}
+            <a href="/login">Log In</a>
+            <a href="/signup">Join Us</a>
+          {% endif %}
+        </div>
+        <div class="footer__newsletter">
+          <strong>Stay in the loop</strong>
+          <p>Mental health insights, program updates, and community news.</p>
+          <form id="footer-nl-form" class="footer__nl-form">
+            <input type="email" id="footer-nl-email" placeholder="Your email"/>
+            <button type="submit">→</button>
+          </form>
+          <p class="footer__nl-msg" id="footer-nl-msg"></p>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>© 2026 The Inner Compass Project · Youth Mental Health Advocacy</p>
+        <p>"Together, we are building safer spaces for minds to grow."</p>
+      </div>
+    </div>
+  </footer>
+  {% endblock %}
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
