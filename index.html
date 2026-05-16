@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% block title %}The Inner Compass Project | Find Your True North{% endblock %}
+
+{% block content %}
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announcement-bar">
+  📢 Welcome to The Inner Compass Project! Join our upcoming Webinar Series.
+  <a href="/signup">Register Now →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero__bg">
+    <div class="hero__orb hero__orb--1"></div>
+    <div class="hero__orb hero__orb--2"></div>
+    <div class="hero__orb hero__orb--3"></div>
+    <div class="hero__grid"></div>
+  </div>
+  <div class="hero__content">
+    <p class="hero__eyebrow reveal">Mental Health Advocacy Network · Ilorin, Nigeria</p>
+    <h1 class="hero__title reveal">You are <em>not</em><br/>alone.</h1>
+    <p class="hero__sub reveal">A student-led movement promoting mental health awareness, emotional well-being, and supportive communities. Understand yourself, support others, and grow emotionally.</p>
+    <div class="hero__actions reveal">
+      {% if session.get('user_id') %}
+        <a href="/dashboard" class="btn btn--primary">Go to Dashboard</a>
+        <a href="#services" class="btn btn--ghost">Our Programs ↓</a>
+      {% else %}
+        <a href="/signup" class="btn btn--primary">Join The Community</a>
+        <a href="#about" class="btn btn--ghost">Explore Resources ↓</a>
+      {% endif %}
+    </div>
+
+    <!-- MOOD TRACKER -->
+    <div class="mood-tracker reveal">
+      <p class="mood-tracker__label">How are you feeling today?</p>
+      <div class="mood-tracker__options">
+        <button class="mood-btn" data-mood="happy"   title="Happy">😊</button>
+        <button class="mood-btn" data-mood="calm"    title="Calm">😌</button>
+        <button class="mood-btn" data-mood="tired"   title="Tired">😴</button>
+        <button class="mood-btn" data-mood="sad"     title="Sad">😥</button>
+        <button class="mood-btn" data-mood="anxious" title="Anxious">😔</button>
+      </div>
+      <p class="mood-tracker__response" id="mood-response"></p>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="hero__stats reveal">
+    <div class="stat-card">
+      <span class="stat-card__num" data-target="{{ stats.members }}">0</span>
+      <span class="stat-card__label">Community Members</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card__num" data-target="{{ stats.programs }}">0</span>
+      <span class="stat-card__label">Outreach Programs</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card__num" data-target="{{ stats.reached }}">0</span>
+      <span class="stat-card__label">Students Reached</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT / MISSION -->
+<section class="section mission-section" id="about">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Our Mission</span>
+      <h2 class="section-title">Building safer spaces for minds to grow</h2>
+      <p class="section-sub">Through technology, empathy, and connection — we make mental wellness accessible to everyone.</p>
+    </div>
+    <div class="mission-grid">
+      <div class="mission-card reveal">
+        <div class="mission-card__icon">🧭</div>
+        <h4>Guidance</h4>
+        <p>Helping individuals find clarity and purpose on their journey to mental wellness through structured mentorship and dialogue.</p>
+      </div>
+      <div class="mission-card reveal">
+        <div class="mission-card__icon">💙</div>
+        <h4>Community</h4>
+        <p>Building strong networks of support and understanding among members and partners. Empathy is our foundation.</p>
+      </div>
+      <div class="mission-card reveal">
+        <div class="mission-card__icon">🌱</div>
+        <h4>Growth</h4>
+        <p>Fostering emotional resilience, leadership development, and personal growth in a safe, inclusive digital space.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section class="section programs-section" id="services">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">What We Do</span>
+      <h2 class="section-title">Interactive Programs</h2>
+      <p class="section-sub">Carefully designed initiatives to educate, support, and empower every member.</p>
+    </div>
+    <div class="programs-grid">
+      <div class="prog-card reveal">
+        <div class="prog-card__icon">🧠</div>
+        <h4>Webinar Series</h4>
+        <p>Engaging virtual discussions featuring expert speakers diving deep into personal and collective mental health development.</p>
+      </div>
+      <div class="prog-card reveal">
+        <div class="prog-card__icon">💬</div>
+        <h4>Dialogue Sessions</h4>
+        <p>Safe spaces for anonymous stories, testimonials, and peer-to-peer engagement to break the stigma.</p>
+      </div>
+      <div class="prog-card reveal">
+        <div class="prog-card__icon">🤝</div>
+        <h4>Community Service</h4>
+        <p>School outreach programs and volunteer opportunities to make a tangible impact in local neighborhoods.</p>
+      </div>
+      <div class="prog-card reveal">
+        <div class="prog-card__icon">🎯</div>
+        <h4>Leadership Training</h4>
+        <p>Transformative sessions cultivating essential leadership skills and emotional intelligence for ambassadors.</p>
+      </div>
+      <div class="prog-card reveal">
+        <div class="prog-card__icon">📻</div>
+        <h4>Radio Program</h4>
+        <p>Informative broadcasts reaching wider audiences with insights and stories about mental health in Nigeria.</p>
+      </div>
+      <div class="prog-card reveal">
+        <div class="prog-card__icon">🏔️</div>
+        <h4>ICP Summit</h4>
+        <p>A culminating annual event uniting participants, experts, and leaders for inspiration and shared learning.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEADERSHIP -->
+<section class="section team-section" id="team">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Meet Our Leadership</span>
+      <h2 class="section-title">The minds driving the mission forward</h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card team-card--founder reveal">
+        <div class="team-card__badge">Founder</div>
+        <div class="team-card__avatar">MA</div>
+        <h4>Mustapha Abdulrasak O.</h4>
+        <p class="team-card__role">Founder & Executive Director</p>
+        <p class="team-card__bio">Leading the global vision, strategy, and overall growth of the movement.</p>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-card__avatar">TS</div>
+        <h4>Tijani Shehu Ahmad</h4>
+        <p class="team-card__role">Co-Founder & Associate Director</p>
+        <p class="team-card__bio">Oversees core organizational programs, chapter integration, and collaborative partnerships.</p>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-card__avatar">RO</div>
+        <h4>Raheemah Ogeke</h4>
+        <p class="team-card__role">Director, Programs & Training</p>
+        <p class="team-card__bio">Executes the master curriculum, peer support training, and webinar series.</p>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-card__avatar">KT</div>
+        <h4>Korede Taiwo</h4>
+        <p class="team-card__role">Director, Communications & Outreach</p>
+        <p class="team-card__bio">Leads public messaging, advocacy campaigns, and strategic school partnerships.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES PREVIEW -->
+<section class="section resources-preview" id="resources">
+  <div class="container">
+    <div class="resources-preview__grid">
+      <div class="reveal">
+        <span class="section-tag">Resource Hub</span>
+        <h2 class="section-title">Mental Health<br/>Resource Library</h2>
+        <p>Access our complete library of mental health materials, journaling prompts, self-help toolkits, and official blueprints.</p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem">
+          <a href="/resources" class="btn btn--primary">Browse All Resources</a>
+          <a href="https://drive.google.com/drive/folders/1J3PkAlAbPQRFXikwYcoY3VFdto3Fpi_l" target="_blank" class="btn btn--ghost">View on Google Drive ↗</a>
+        </div>
+      </div>
+      <div class="resources-preview__cards reveal">
+        <div class="res-mini-card">🤖 ChatGPT AI Guide</div>
+        <div class="res-mini-card">✨ Gemini AI Agent</div>
+        <div class="res-mini-card">📓 Journaling Prompts</div>
+        <div class="res-mini-card">📂 Google Drive Library</div>
+        <div class="res-mini-card">🩺 First Aid Guide</div>
+        <div class="res-mini-card">📞 Crisis Support Lines</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact-section" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <span class="section-tag">Get In Touch</span>
+        <h2 class="section-title">We are always here.</h2>
+        <p>Reach out to partner, volunteer, or just talk. No message goes unanswered.</p>
+        <div class="contact-detail">
+          <span>📍</span>
+          <div>
+            <strong>Headquarters</strong>
+            <p>No. 25 Zone E, Hajj Camp Road,<br>Ilorin, Kwara State, Nigeria</p>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <span>📧</span>
+          <div>
+            <strong>Email Us</strong>
+            <a href="mailto:Innercompassproject25@gmail.com">Innercompassproject25@gmail.com</a>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <span>📱</span>
+          <div>
+            <strong>Call / WhatsApp</strong>
+            <p>08145739207 · 07015820935</p>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form-wrap reveal">
+        <form id="contact-form" class="contact-form">
+          <h3>Send a Message</h3>
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="c-name" placeholder="Your name" required
+              value="{{ current_user.full_name if current_user else '' }}"/>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="c-email" placeholder="your@email.com" required
+              value="{{ current_user.email if current_user else '' }}"/>
+          </div>
+          <div class="form-group">
+            <label>Subject</label>
+            <input type="text" id="c-subject" placeholder="What's this about?" required/>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea id="c-message" rows="5" placeholder="Your message…" required></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary btn--full">Send Message</button>
+          <p class="form-msg" id="c-msg"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN CTA BANNER -->
+{% if not session.get('user_id') %}
+<section class="cta-banner">
+  <div class="container">
+    <div class="cta-banner__inner reveal">
+      <h2>Ready to find your true north?</h2>
+      <p>Join hundreds of members already building better mental wellness together.</p>
+      <a href="/signup" class="btn btn--primary">Join The Community — It's Free</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

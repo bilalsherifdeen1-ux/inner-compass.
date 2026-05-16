@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Join Us | Inner Compass Project{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card">
+    <a href="/" class="auth-back">← Back to Home</a>
+    <div class="auth-logo">
+      <svg viewBox="0 0 40 40" fill="none" width="36">
+        <circle cx="20" cy="20" r="18" stroke="var(--green)" stroke-width="1.5"/>
+        <path d="M20 4 L23 18 L20 36 L17 18 Z" fill="var(--green)" opacity="0.9"/>
+        <path d="M4 20 L18 17 L36 20 L18 23 Z" fill="var(--teal)" opacity="0.9"/>
+        <circle cx="20" cy="20" r="3" fill="var(--green)"/>
+      </svg>
+      <span>Inner Compass</span>
+    </div>
+    <h2>Join the Community</h2>
+    <p class="auth-sub">Create your free account and start your journey.</p>
+
+    {% if error %}
+    <div class="auth-error">{{ error }}</div>
+    {% endif %}
+
+    <div class="auth-error" id="js-error" style="display:none"></div>
+    <div class="auth-success" id="js-success" style="display:none"></div>
+
+    <form id="signup-form" novalidate>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="s-name" placeholder="Your full name" autocomplete="name"/>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="s-email" placeholder="your@email.com" autocomplete="email"/>
+      </div>
+      <div class="form-group">
+        <label>Password <small style="color:var(--text-muted);font-weight:400">(min. 8 characters)</small></label>
+        <div class="input-pw-wrap">
+          <input type="password" id="s-password" placeholder="Create a password" autocomplete="new-password"/>
+          <button type="button" class="pw-toggle" onclick="togglePw('s-password',this)">👁</button>
+        </div>
+        <div class="pw-strength"><div class="pw-strength__bar" id="pw-bar"></div></div>
+        <p class="pw-strength__label" id="pw-label"></p>
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <div class="input-pw-wrap">
+          <input type="password" id="s-confirm" placeholder="Repeat your password" autocomplete="new-password"/>
+          <button type="button" class="pw-toggle" onclick="togglePw('s-confirm',this)">👁</button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn--primary btn--full" id="signup-btn">
+        Create My Account
+      </button>
+    </form>
+    <p class="auth-switch">Already have an account? <a href="/login">Log in here</a></p>
+  </div>
+
+  <div class="auth-side">
+    <div class="auth-side__content">
+      <h3>"Together, we are building safer spaces for minds to grow."</h3>
+      <ul class="auth-benefits">
+        <li>✓ Access our full mental health resource library</li>
+        <li>✓ Track your mood and emotional journey</li>
+        <li>✓ Join webinars, dialogues &amp; community events</li>
+        <li>✓ Connect with AI wellness support 24/7</li>
+        <li>✓ Free — always</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePw(id, btn) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+
+document.getElementById('s-password').addEventListener('input', function () {
+  const v = this.value;
+  const bar = document.getElementById('pw-bar');
+  const lbl = document.getElementById('pw-label');
+  let s = 0;
+  if (v.length >= 8) s++;
+  if (/[A-Z]/.test(v)) s++;
+  if (/[0-9]/.test(v)) s++;
+  if (/[^A-Za-z0-9]/.test(v)) s++;
+  const colors = ['#e74c3c', '#e67e22', '#f1c40f', '#2ecc71'];
+  const labels = ['Weak', 'Fair', 'Good', 'Strong'];
+  bar.style.width = (s / 4 * 100) + '%';
+  bar.style.background = colors[s - 1] || '#eee';
+  lbl.textContent = v.length ? (labels[s - 1] || '') : '';
+});
+
+document.getElementById('signup-form').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const errEl = document.getElementById('js-error');
+  const sucEl = document.getElementById('js-success');
+  const btn   = document.getElementById('signup-btn');
+
+  errEl.style.display = 'none';
+  sucEl.style.display = 'none';
+
+  const name     = document.getElementById('s-name').value.trim();
+  const email    = document.getElementById('s-email').value.trim();
+  const password = document.getElementById('s-password').value;
+  const confirm  = document.getElementById('s-confirm').value;
+
+  if (!name) { errEl.textContent = 'Please enter your full name.'; errEl.style.display = 'block'; return; }
+  if (!email) { errEl.textContent = 'Please enter your email address.'; errEl.style.display = 'block'; return; }
+  if (!password) { errEl.textContent = 'Please create a password.'; errEl.style.display = 'block'; return; }
+  if (password.length < 8) { errEl.textContent = 'Password must be at least 8 characters.'; errEl.style.display = 'block'; return; }
+  if (password !== confirm) { errEl.textContent = 'Passwords do not match.'; errEl.style.display = 'block'; return; }
+
+  btn.disabled    = true;
+  btn.textContent = 'Creating account…';
+
+  try {
+    const res  = await fetch('/signup', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ full_name: name, email, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      sucEl.textContent = '🎉 Account created! Redirecting…';
+      sucEl.style.display = 'block';
+      setTimeout(() => window.location.href = data.redirect, 1200);
+    } else {
+      errEl.textContent   = data.error || 'Something went wrong. Please try again.';
+      errEl.style.display = 'block';
+      btn.disabled        = false;
+      btn.textContent     = 'Create My Account';
+    }
+  } catch (err) {
+    errEl.textContent   = 'Network error. Please check your connection and try again.';
+    errEl.style.display = 'block';
+    btn.disabled        = false;
+    btn.textContent     = 'Create My Account';
+  }
+});
+</script>
+{% endblock %}
