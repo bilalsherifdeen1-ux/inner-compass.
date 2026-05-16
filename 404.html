@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found | Inner Compass{% endblock %}
+
+{% block content %}
+<div style="min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem">
+  <div>
+    <div style="font-size:5rem;margin-bottom:1rem">🧭</div>
+    <h1 style="font-size:6rem;color:var(--green);margin-bottom:0;line-height:1">404</h1>
+    <h2 style="margin-bottom:1rem">You seem a little lost</h2>
+    <p style="max-width:400px;margin:0 auto 2rem">Even the best compasses need recalibrating sometimes. This page doesn't exist — but your journey does.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <a href="/" class="btn btn--primary">← Back to Home</a>
+      <a href="/resources" class="btn btn--ghost">Browse Resources</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
