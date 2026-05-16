@@ -121,7 +121,7 @@ def get_stats():
     }
 
 
-# ── Public Page Routes ──────────────────────────────────────
+# ── Public Routes ───────────────────────────────────────────
 
 @app.route('/')
 def home():
@@ -133,7 +133,62 @@ def resources():
     return render_template('resources.html')
 
 
-# ── Member Auth Routes ──────────────────────────────────────
+# ── TEMPORARY PASSWORD RESET ROUTE ──────────────────────────
+# Visit this URL once to reset the admin password, then
+# delete this route from app.py and redeploy immediately.
+@app.route('/icp-reset-admin-8x7k2p')
+def reset_admin_password():
+    admin_email = os.environ.get('ADMIN_EMAIL', 'Innercompassproject25@gmail.com')
+    admin_pw    = os.environ.get('ADMIN_PASSWORD', 'ICP@Admin2025!')
+    user = User.query.filter_by(email=admin_email).first()
+    if user:
+        user.password_hash = generate_password_hash(admin_pw, method='pbkdf2:sha256')
+        user.role = 'admin'
+        db.session.commit()
+        return f"""
+        <div style="font-family:sans-serif;max-width:500px;margin:80px auto;text-align:center;padding:2rem;border:2px solid #4ead7d;border-radius:16px">
+          <h2 style="color:#2d9b6a">✅ Admin Password Reset!</h2>
+          <p>Email: <strong>{admin_email}</strong></p>
+          <p>Password: <strong>{admin_pw}</strong></p>
+          <br>
+          <a href="/icp-admin-login" style="background:#4ead7d;color:white;padding:.8rem 2rem;border-radius:100px;text-decoration:none;font-weight:500">
+            Go to Admin Login →
+          </a>
+          <br><br>
+          <p style="color:#e74c3c;font-size:.85rem">
+            ⚠️ IMPORTANT: Delete this route from app.py now and redeploy!
+          </p>
+        </div>
+        """
+    else:
+        # User doesn't exist at all — create them
+        new_admin = User(
+            username      = 'Mustapha Abdulrasak',
+            email         = admin_email,
+            password_hash = generate_password_hash(admin_pw, method='pbkdf2:sha256'),
+            role          = 'admin'
+        )
+        db.session.add(new_admin)
+        db.session.commit()
+        return f"""
+        <div style="font-family:sans-serif;max-width:500px;margin:80px auto;text-align:center;padding:2rem;border:2px solid #4ead7d;border-radius:16px">
+          <h2 style="color:#2d9b6a">✅ Admin Account Created!</h2>
+          <p>Email: <strong>{admin_email}</strong></p>
+          <p>Password: <strong>{admin_pw}</strong></p>
+          <br>
+          <a href="/icp-admin-login" style="background:#4ead7d;color:white;padding:.8rem 2rem;border-radius:100px;text-decoration:none;font-weight:500">
+            Go to Admin Login →
+          </a>
+          <br><br>
+          <p style="color:#e74c3c;font-size:.85rem">
+            ⚠️ IMPORTANT: Delete this route from app.py now and redeploy!
+          </p>
+        </div>
+        """
+# ── END TEMPORARY ROUTE ─────────────────────────────────────
+
+
+# ── Member Auth ─────────────────────────────────────────────
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -141,33 +196,35 @@ def signup():
         return redirect(url_for('dashboard'))
 
     if request.method == 'POST':
-        # JSON (fetch API)
         if request.is_json:
             data     = request.get_json()
             username = (data.get('full_name') or data.get('username') or '').strip()
             email    = (data.get('email') or '').strip().lower()
             password = data.get('password') or ''
         else:
-            # fallback form POST
             username = request.form.get('username', '').strip()
             email    = request.form.get('email', '').strip().lower()
             password = request.form.get('password', '')
 
         if not all([username, email, password]):
-            err = {"success": False, "error": "All fields are required."}
-            return jsonify(err), 400 if request.is_json else redirect(url_for('signup'))
+            if request.is_json:
+                return jsonify({"success": False, "error": "All fields are required."}), 400
+            return redirect(url_for('signup'))
 
         if len(password) < 8:
-            err = {"success": False, "error": "Password must be at least 8 characters."}
-            return jsonify(err), 400 if request.is_json else redirect(url_for('signup'))
+            if request.is_json:
+                return jsonify({"success": False, "error": "Password must be at least 8 characters."}), 400
+            return redirect(url_for('signup'))
 
         if User.query.filter_by(email=email).first():
-            err = {"success": False, "error": "Email already registered. Please log in."}
-            return jsonify(err), 409 if request.is_json else redirect(url_for('login'))
+            if request.is_json:
+                return jsonify({"success": False, "error": "Email already registered. Please log in."}), 409
+            return redirect(url_for('login'))
 
         user = User(
-            username=username, email=email,
-            password_hash=generate_password_hash(password, method='pbkdf2:sha256')
+            username      = username,
+            email         = email,
+            password_hash = generate_password_hash(password, method='pbkdf2:sha256')
         )
         db.session.add(user)
         db.session.commit()
@@ -217,11 +274,10 @@ def logout():
     return redirect(url_for('home'))
 
 
-# ── Hidden Admin Login (not linked anywhere public) ─────────
+# ── Hidden Admin Login ──────────────────────────────────────
 
 @app.route('/icp-admin-login', methods=['GET', 'POST'])
 def admin_login():
-    # If already logged in as admin, go straight to panel
     if current_user.is_authenticated and current_user.role == 'admin':
         return redirect(url_for('admin'))
 
@@ -229,8 +285,7 @@ def admin_login():
     if request.method == 'POST':
         email    = request.form.get('email', '').strip().lower()
         password = request.form.get('password', '')
-
-        user = User.query.filter_by(email=email, role='admin').first()
+        user     = User.query.filter_by(email=email, role='admin').first()
         if user and check_password_hash(user.password_hash, password):
             user.last_login = datetime.utcnow()
             db.session.commit()
@@ -250,10 +305,10 @@ def dashboard():
     mood_logs = MoodLog.query.filter_by(user_id=current_user.id)\
                              .order_by(MoodLog.logged_at.desc()).limit(7).all()
     return render_template('dashboard.html',
-                           user=current_user,
-                           username=current_user.username,
-                           stats=get_stats(),
-                           mood_logs=mood_logs)
+                           user         = current_user,
+                           username     = current_user.username,
+                           stats        = get_stats(),
+                           mood_logs    = mood_logs)
 
 
 @app.route('/admin')
@@ -298,8 +353,8 @@ def handle_upload():
 @app.route('/api/contact', methods=['POST'])
 def api_contact():
     data    = request.get_json()
-    name    = (data.get('name') or '').strip()
-    email   = (data.get('email') or '').strip()
+    name    = (data.get('name')    or '').strip()
+    email   = (data.get('email')   or '').strip()
     subject = (data.get('subject') or '').strip()
     message = (data.get('message') or '').strip()
 
@@ -371,7 +426,7 @@ def api_profile():
 @login_required
 @admin_required
 def mark_read(msg_id):
-    msg = ContactMessage.query.get_or_404(msg_id)
+    msg      = ContactMessage.query.get_or_404(msg_id)
     msg.read = True
     db.session.commit()
     return jsonify({"success": True})
@@ -419,20 +474,17 @@ def not_found(e):
 with app.app_context():
     db.create_all()
 
-    # Auto-create admin account
     if not User.query.filter_by(role='admin').first():
-        admin_user = User(
+        admin_email = os.environ.get('ADMIN_EMAIL', 'Innercompassproject25@gmail.com')
+        admin_pw    = os.environ.get('ADMIN_PASSWORD', 'ICP@Admin2025!')
+        db.session.add(User(
             username      = 'Mustapha Abdulrasak',
-            email         = os.environ.get('ADMIN_EMAIL', 'Innercompassproject25@gmail.com'),
-            password_hash = generate_password_hash(
-                os.environ.get('ADMIN_PASSWORD', 'ICP@Admin2025!'),
-                method='pbkdf2:sha256'),
-            role = 'admin'
-        )
-        db.session.add(admin_user)
+            email         = admin_email,
+            password_hash = generate_password_hash(admin_pw, method='pbkdf2:sha256'),
+            role          = 'admin'
+        ))
         db.session.commit()
 
-    # Seed outreach programs so counters are never 0
     if OutreachProgram.query.count() == 0:
         db.session.add_all([
             OutreachProgram(title="Kwara School Outreach", location="Ilorin",
