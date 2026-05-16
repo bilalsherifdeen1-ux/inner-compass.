@@ -1,0 +1,417 @@
+{% extends "base.html" %}
+{% block title %}Resource Hub | Inner Compass Project{% endblock %}
+
+{% block content %}
+<section class="resources-hero">
+  <div class="container">
+    <div class="resources-hero__inner reveal">
+      <span class="section-tag">Mental Health Resource Hub</span>
+      <h1>Your Wellness Library</h1>
+      <p>Guides, toolkits, AI support, and materials to support every step of your mental health journey. Free. Always.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section resources-main">
+  <div class="container">
+
+    <div class="res-search reveal">
+      <input type="text" id="res-search" placeholder="🔍  Search resources…" oninput="filterResources(this.value)"/>
+    </div>
+
+    <div class="res-filters reveal">
+      <button class="res-filter active" data-cat="all">All</button>
+      <button class="res-filter" data-cat="ai">AI Support</button>
+      <button class="res-filter" data-cat="toolkit">Toolkits</button>
+      <button class="res-filter" data-cat="guide">Guides</button>
+      <button class="res-filter" data-cat="journal">Journaling</button>
+      <button class="res-filter" data-cat="document">Documents</button>
+      <button class="res-filter" data-cat="external">External</button>
+    </div>
+
+    <div class="resources-grid" id="resources-grid">
+
+      <!-- AI AGENTS -->
+      <div class="res-full-card reveal" data-cat="ai" data-title="Inner Compass AI Guide ChatGPT">
+        <div class="res-full-card__icon">🤖</div>
+        <div class="res-full-card__body">
+          <span class="res-full-card__tag">AI Support</span>
+          <h4>Inner Compass AI Guide</h4>
+          <p>Our custom AI mental health guide built on ChatGPT. Get personalised support, coping strategies, and wellness advice anytime — available 24/7.</p>
+          <a href="https://chatgpt.com/g/g-6960476953a88191b94a38dfe2a9ba0b-inner-compass-guide"
+             target="_blank" class="btn btn--primary" style="font-size:.85rem;padding:.6rem 1.4rem">
+            Open AI Guide ↗
+          </a>
+        </div>
+      </div>
+
+      <div class="res-full-card reveal" data-cat="ai" data-title="Inner Compass Gemini AI Agent">
+        <div class="res-full-card__icon">✨</div>
+        <div class="res-full-card__body">
+          <span class="res-full-card__tag">AI Support</span>
+          <h4>ICP Gemini Wellness Agent</h4>
+          <p>Our Google Gemini-powered wellness companion. Talk through your feelings, explore mental health topics, and get guided support from our AI agent.</p>
+          <a href="https://gemini.google.com/gem/1Xnjtg91xdLvsjJSh6UuyOF59xct5YNKE?usp=sharing"
+             target="_blank" class="btn btn--primary" style="font-size:.85rem;padding:.6rem 1.4rem">
+            Open Gemini Agent ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- DOCUMENTS -->
+      <div class="res-full-card reveal" data-cat="document" data-title="ICP Blueprint">
+        <div class="res-full-card__icon">📋</div>
+        <div class="res-full-card__body">
+          <span class="res-full-card__tag">Document</span>
+          <h4>ICP Blueprint</h4>
+          <p>Our official founding document covering the project's vision, structure, programs, and constitution. Essential reading for all members.</p>
+          <a href="https://res.cloudinary.com/doxfhckdx/image/upload/v1778670168/inner_compass_docs/xup626au2n0c8l5allvm.pdf"
+             target="_blank" class="btn btn--primary" style="font-size:.85rem;padding:.6rem 1.4rem">
+            Download PDF ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- GOOGLE DRIVE -->
+      <div class="res-full-card reveal" data-cat="external" data-title="Google Drive Library">
+        <div class="res-full-card__icon">📂</div>
+        <div class="res-full-card__body">
+          <span class="res-full-card__tag">External</span>
+          <h4>Google Drive Library</h4>
+          <p>Complete collection of all ICP materials — session recordings, worksheets, programme guides, and more. Always kept up to date by the team.</p>
+          <a href="https://drive.google.com/drive/folders/1J3PkAlAbPQRFXikwYcoY3VFdto3Fpi_l"
+             target="_blank" class="btn btn--primary" style="font-size:.85rem;padding:.6rem 1.4rem">
+            Open Drive ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- JOURNALING -->
+      <div class="res-full-card reveal" data-cat="journal" data-title="Journaling Prompts">
+        <div class="res-full-card__icon">📓</div>
+        <div class="res-full-card__body">
+          <span class="res-full-card__tag">Journaling</span>
+          <h4>Daily Journaling Prompts</h4>
+          <p>30 guided questions to help you explore your thoughts, feelings, and personal growth every day. No experience needed.</p>
+          <button class="btn btn--primary" style="font-size:.85rem;padding:.6rem 1.4rem"
+                  onclick="document.getElementById('prompts-modal').classList.add('open')">
+            Open Prompts →
+          </button>
+        </div>
+      </div>
+
+      <!-- TOOLKIT -->
+      <div class="res-full-card reveal" data-cat="toolkit" data-title="Self-Help Toolkit">
+        <div class="res-full-card__icon">🧘</div>
+        <div class="res-full-card__body">
+          <span class="res-full-card__tag">Toolkit</span>
+          <h4>Self-Help Emotional Toolkit</h4>
+          <p>Practical, evidence-informed exercises for managing anxiety, building resilience, and regulating your emotions day to day.</p>
+          <button class="btn btn--primary" style="font-size:.85rem;padding:.6rem 1.4rem"
+                  onclick="document.getElementById('toolkit-modal').classList.add('open')">
+            View Toolkit →
+          </button>
+        </div>
+      </div>
+
+      <!-- FIRST AID -->
+      <div class="res-full-card reveal" data-cat="guide" data-title="Mental Health First Aid">
+        <div class="res-full-card__icon">🩺</div>
+        <div class="res-full-card__body">
+          <span class="res-full-card__tag">Guide</span>
+          <h4>Mental Health First Aid Guide</h4>
+          <p>How to recognise signs of mental health distress in yourself and others — and exactly what to do about it.</p>
+          <button class="btn btn--primary" style="font-size:.85rem;padding:.6rem 1.4rem"
+                  onclick="document.getElementById('firstaid-modal').classList.add('open')">
+            Read Guide →
+          </button>
+        </div>
+      </div>
+
+      <!-- CRISIS LINES -->
+      <div class="res-full-card reveal" data-cat="guide" data-title="Crisis Support Nigeria">
+        <div class="res-full-card__icon">📞</div>
+        <div class="res-full-card__body">
+          <span class="res-full-card__tag">Guide</span>
+          <h4>Crisis & Support Lines — Nigeria</h4>
+          <p>Emergency contacts, mental health helplines, and support organisations available across Nigeria. Save these numbers.</p>
+          <button class="btn btn--primary" style="font-size:.85rem;padding:.6rem 1.4rem"
+                  onclick="document.getElementById('crisis-modal').classList.add('open')">
+            View Contacts →
+          </button>
+        </div>
+      </div>
+
+      <!-- BREATHING -->
+      <div class="res-full-card reveal" data-cat="toolkit" data-title="Breathing Exercises">
+        <div class="res-full-card__icon">💨</div>
+        <div class="res-full-card__body">
+          <span class="res-full-card__tag">Toolkit</span>
+          <h4>Breathing & Grounding Exercises</h4>
+          <p>Simple breathing techniques and 5-4-3-2-1 grounding exercises for moments of anxiety, panic, or overwhelm.</p>
+          <button class="btn btn--primary" style="font-size:.85rem;padding:.6rem 1.4rem"
+                  onclick="document.getElementById('breathing-modal').classList.add('open')">
+            Try Now →
+          </button>
+        </div>
+      </div>
+
+      <!-- NEWSLETTER -->
+      <div class="res-full-card reveal" data-cat="guide" data-title="ICP Newsletter">
+        <div class="res-full-card__icon">📰</div>
+        <div class="res-full-card__body">
+          <span class="res-full-card__tag">Newsletter</span>
+          <h4>ICP Wellness Newsletter</h4>
+          <p>Monthly mental health insights, program updates, and member stories delivered directly to your inbox.</p>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+            <input type="email" id="res-nl-email"
+                   placeholder="your@email.com"
+                   style="padding:.6rem 1rem;border:1.5px solid var(--border);border-radius:100px;
+                          font-family:'DM Sans';font-size:.85rem;outline:none;flex:1;min-width:180px"/>
+            <button class="btn btn--primary" style="font-size:.85rem;padding:.6rem 1.2rem"
+                    onclick="resSubscribe()">Subscribe</button>
+          </div>
+          <p class="form-msg" id="res-nl-msg" style="margin-top:.5rem"></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── MODALS ─────────────────────────────────────────── -->
+
+<!-- Journaling Prompts -->
+<div class="modal-overlay" id="prompts-modal"
+     onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal__close"
+            onclick="document.getElementById('prompts-modal').classList.remove('open')">✕</button>
+    <h3>📓 Daily Journaling Prompts</h3>
+    <ol class="prompts-list">
+      <li>What emotion am I carrying most right now, and where do I feel it in my body?</li>
+      <li>What is one thing I am grateful for today that I often overlook?</li>
+      <li>What would I tell a close friend who was feeling the way I feel right now?</li>
+      <li>What boundaries do I need to set or reinforce this week?</li>
+      <li>What does my ideal day of rest look like?</li>
+      <li>Who in my life makes me feel truly seen? How can I connect with them more?</li>
+      <li>What fear is holding me back right now? Is it realistic?</li>
+      <li>What is one small thing I can do today to care for my mental health?</li>
+      <li>What am I avoiding that I know I need to face?</li>
+      <li>What does growth look like for me right now?</li>
+      <li>When did I last feel truly at peace? What was happening?</li>
+      <li>What would I do today if I knew I could not fail?</li>
+      <li>What drains my energy the most — and what gives it back?</li>
+      <li>How have I grown in the last 6 months?</li>
+      <li>What do I need to forgive myself for?</li>
+    </ol>
+  </div>
+</div>
+
+<!-- Toolkit -->
+<div class="modal-overlay" id="toolkit-modal"
+     onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal__close"
+            onclick="document.getElementById('toolkit-modal').classList.remove('open')">✕</button>
+    <h3>🧘 Self-Help Emotional Toolkit</h3>
+    <div class="crisis-list">
+      <div class="crisis-item">
+        <strong>Box Breathing (4-4-4-4)</strong>
+        <p>Inhale for 4 counts → Hold for 4 → Exhale for 4 → Hold for 4. Repeat 4 times. Reduces anxiety instantly.</p>
+      </div>
+      <div class="crisis-item">
+        <strong>5-4-3-2-1 Grounding</strong>
+        <p>Name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste. Brings you back to the present.</p>
+      </div>
+      <div class="crisis-item">
+        <strong>Body Scan</strong>
+        <p>Close your eyes. Slowly move your awareness from your feet to your head, noticing tension and releasing it.</p>
+      </div>
+      <div class="crisis-item">
+        <strong>Gratitude Practice</strong>
+        <p>Write down 3 specific things you are grateful for today. Do this every morning for 21 days for best results.</p>
+      </div>
+      <div class="crisis-item">
+        <strong>Progressive Muscle Relaxation</strong>
+        <p>Tense each muscle group for 5 seconds then release. Start from your feet and work upward to your face.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- First Aid -->
+<div class="modal-overlay" id="firstaid-modal"
+     onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal__close"
+            onclick="document.getElementById('firstaid-modal').classList.remove('open')">✕</button>
+    <h3>🩺 Mental Health First Aid</h3>
+    <div class="crisis-list">
+      <div class="crisis-item">
+        <strong>Signs to watch for</strong>
+        <p>Withdrawal from friends, sudden mood changes, talking about hopelessness, neglecting self-care, giving away possessions.</p>
+      </div>
+      <div class="crisis-item">
+        <strong>How to approach someone</strong>
+        <p>Choose a quiet private moment. Say "I've noticed you seem down — I care about you. Would you like to talk?" Listen without judging.</p>
+      </div>
+      <div class="crisis-item">
+        <strong>What NOT to do</strong>
+        <p>Don't minimise their feelings. Don't say "just cheer up." Don't leave someone in crisis alone.</p>
+      </div>
+      <div class="crisis-item">
+        <strong>When to escalate</strong>
+        <p>If someone mentions suicide or self-harm, take it seriously. Stay with them and help connect them to a professional immediately.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Crisis Lines -->
+<div class="modal-overlay" id="crisis-modal"
+     onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal__close"
+            onclick="document.getElementById('crisis-modal').classList.remove('open')">✕</button>
+    <h3>📞 Crisis & Support Lines — Nigeria</h3>
+    <div class="crisis-list">
+      <div class="crisis-item">
+        <strong>Nigerian Suicide Prevention Initiative (NSPI)</strong>
+        <p>+234 806 210 6493 · Available 24/7</p>
+      </div>
+      <div class="crisis-item">
+        <strong>Mentally Aware Nigeria Initiative (MANI)</strong>
+        <p><a href="https://mani.org.ng" target="_blank">mani.org.ng</a> · Online peer support</p>
+      </div>
+      <div class="crisis-item">
+        <strong>Inner Compass Project Direct Line</strong>
+        <p>08145739207 · 07015820935 · WhatsApp available</p>
+      </div>
+      <div class="crisis-item">
+        <strong>Federal Neuropsychiatric Hospital</strong>
+        <p>Yaba, Lagos · +234 1 774 0015</p>
+      </div>
+      <div class="crisis-item">
+        <strong>ICP AI Support (24/7)</strong>
+        <p>
+          <a href="https://chatgpt.com/g/g-6960476953a88191b94a38dfe2a9ba0b-inner-compass-guide"
+             target="_blank">ChatGPT Guide</a> ·
+          <a href="https://gemini.google.com/gem/1Xnjtg91xdLvsjJSh6UuyOF59xct5YNKE?usp=sharing"
+             target="_blank">Gemini Agent</a>
+        </p>
+      </div>
+      <p class="crisis-note">🚨 If you are in immediate danger, call <strong>112</strong> or go to your nearest hospital.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Breathing -->
+<div class="modal-overlay" id="breathing-modal"
+     onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal__close"
+            onclick="document.getElementById('breathing-modal').classList.remove('open')">✕</button>
+    <h3>💨 Breathing Exercise</h3>
+    <div style="text-align:center;padding:1rem 0">
+      <div id="breath-circle" style="width:120px;height:120px;border-radius:50%;
+           background:linear-gradient(135deg,var(--green),var(--teal));
+           margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:center;
+           color:white;font-size:.9rem;font-weight:500;transition:transform 4s ease">
+        Press Start
+      </div>
+      <p id="breath-text" style="font-size:1.2rem;font-weight:500;color:var(--navy);margin-bottom:1.5rem"></p>
+      <button class="btn btn--primary" id="breath-btn" onclick="startBreathing()">Start Exercise</button>
+    </div>
+    <div class="crisis-item" style="margin-top:1rem">
+      <strong>Box Breathing — 4 counts each phase</strong>
+      <p>Inhale → Hold → Exhale → Hold. Repeat 4 times for instant calm.</p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Filter by category
+document.querySelectorAll('.res-filter').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.res-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cat = btn.dataset.cat;
+    document.querySelectorAll('.res-full-card').forEach(card => {
+      card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+    });
+  });
+});
+
+function filterResources(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('.res-full-card').forEach(card => {
+    card.style.display = card.dataset.title.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+// Newsletter subscribe
+async function resSubscribe() {
+  const email = document.getElementById('res-nl-email').value.trim();
+  const msg   = document.getElementById('res-nl-msg');
+  if (!email) return showMsg(msg, 'Please enter your email.', 'error');
+  try {
+    const res  = await fetch('/api/subscribe', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    showMsg(msg, data.message || data.error, data.success ? 'success' : 'error');
+    if (data.success) document.getElementById('res-nl-email').value = '';
+  } catch { showMsg(msg, 'Network error.', 'error'); }
+}
+
+// Breathing exercise
+let breathInterval = null;
+const phases = [
+  { label: 'Inhale...', dur: 4000, scale: 1.4 },
+  { label: 'Hold...',   dur: 4000, scale: 1.4 },
+  { label: 'Exhale...', dur: 4000, scale: 1.0 },
+  { label: 'Hold...',   dur: 4000, scale: 1.0 },
+];
+function startBreathing() {
+  const circle = document.getElementById('breath-circle');
+  const text   = document.getElementById('breath-text');
+  const btn    = document.getElementById('breath-btn');
+  if (breathInterval) {
+    clearInterval(breathInterval);
+    breathInterval = null;
+    circle.style.transform = 'scale(1)';
+    circle.textContent = 'Press Start';
+    text.textContent = '';
+    btn.textContent = 'Start Exercise';
+    return;
+  }
+  btn.textContent = 'Stop';
+  let i = 0, cycles = 0;
+  function run() {
+    if (cycles >= 4) {
+      clearInterval(breathInterval);
+      breathInterval = null;
+      circle.style.transform = 'scale(1)';
+      circle.textContent = 'Done! 🌿';
+      text.textContent = 'Great job. You should feel calmer now.';
+      btn.textContent = 'Start Again';
+      return;
+    }
+    const p = phases[i % 4];
+    circle.style.transition = `transform ${p.dur}ms ease`;
+    circle.style.transform  = `scale(${p.scale})`;
+    circle.textContent = p.label;
+    text.textContent   = p.label;
+    if (i % 4 === 3) cycles++;
+    i++;
+  }
+  run();
+  breathInterval = setInterval(run, 4000);
+}
+</script>
+{% endblock %}
