@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel | Inner Compass{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+  <aside class="dash-sidebar">
+    <div class="dash-sidebar__profile">
+      <div class="dash-avatar" style="background:linear-gradient(135deg,#e74c3c,#c0392b)">AD</div>
+      <div>
+        <strong>Admin Panel</strong>
+        <span class="dash-role">{{ username }}</span>
+      </div>
+    </div>
+    <nav class="dash-nav">
+      <a href="#" class="dash-nav__link active" data-tab="overview">📊 Overview</a>
+      <a href="#" class="dash-nav__link" data-tab="messages">✉️ Messages
+        {% if unread %}<span class="badge">{{ unread }}</span>{% endif %}
+      </a>
+      <a href="#" class="dash-nav__link" data-tab="members">👥 Members</a>
+      <a href="#" class="dash-nav__link" data-tab="programs">📍 Programs</a>
+    </nav>
+    <a href="/dashboard" class="dash-logout">← Member Dashboard</a>
+  </aside>
+
+  <main class="dash-main">
+
+    <!-- OVERVIEW -->
+    <div class="dash-tab active" id="tab-overview">
+      <div class="dash-header">
+        <h2>Admin Overview ⚙️</h2>
+        <p>All the numbers at a glance.</p>
+      </div>
+      <div class="dash-stats">
+        <div class="dash-stat">
+          <span class="dash-stat__num" data-target="{{ stats.members }}">0</span>
+          <span class="dash-stat__label">Total Members</span>
+        </div>
+        <div class="dash-stat">
+          <span class="dash-stat__num" data-target="{{ messages|length }}">0</span>
+          <span class="dash-stat__label">Total Messages</span>
+        </div>
+        <div class="dash-stat">
+          <span class="dash-stat__num" data-target="{{ stats.programs }}">0</span>
+          <span class="dash-stat__label">Programs Run</span>
+        </div>
+        <div class="dash-stat">
+          <span class="dash-stat__num" data-target="{{ stats.reached }}">0</span>
+          <span class="dash-stat__label">Students Reached</span>
+        </div>
+      </div>
+      {% if unread %}
+      <div class="alert alert--warning">
+        📬 You have <strong>{{ unread }} unread message{{ 's' if unread != 1 }}</strong>.
+        <a href="#" class="dash-tab-link" data-tab="messages">View now →</a>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="dash-tab" id="tab-messages">
+      <div class="dash-header">
+        <h2>Contact Messages ✉️</h2>
+        <p>{{ messages|length }} total · {{ unread }} unread</p>
+      </div>
+      {% if messages %}
+      <div class="admin-table">
+        <div class="admin-table__head">
+          <span>Name</span><span>Subject</span><span>Date</span><span>Status</span>
+        </div>
+        {% for msg in messages %}
+        <div class="admin-table__row {% if not msg.read %}admin-table__row--unread{% endif %}" onclick="expandMsg(this)">
+          <span><strong>{{ msg.name }}</strong><br><small>{{ msg.email }}</small></span>
+          <span>{{ msg.subject }}</span>
+          <span>{{ msg.created_at.strftime('%b %d, %Y') }}</span>
+          <span>
+            {% if msg.read %}
+              <span class="status-badge status-badge--read">Read</span>
+            {% else %}
+              <button class="btn-sm" onclick="markRead(event, {{ msg.id }}, this)">Mark Read</button>
+            {% endif %}
+          </span>
+        </div>
+        <div class="admin-table__expand" style="display:none">
+          <p><strong>Message:</strong> {{ msg.message }}</p>
+          <a href="mailto:{{ msg.email }}?subject=Re: {{ msg.subject }}" class="btn-sm">Reply via Email</a>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="dash-empty">No messages yet.</p>
+      {% endif %}
+    </div>
+
+    <!-- MEMBERS -->
+    <div class="dash-tab" id="tab-members">
+      <div class="dash-header">
+        <h2>Members 👥</h2>
+        <p>{{ stats.members }} registered members</p>
+      </div>
+      {% if users %}
+      <div class="admin-table">
+        <div class="admin-table__head">
+          <span>Name</span><span>Email</span><span>Role</span><span>Joined</span><span>Actions</span>
+        </div>
+        {% for u in users %}
+        <div class="admin-table__row">
+          <span>{{ u.full_name }}</span>
+          <span>{{ u.email }}</span>
+          <span><span class="status-badge status-badge--{{ u.role }}">{{ u.role.title() }}</span></span>
+          <span>{{ u.joined_at.strftime('%b %d, %Y') }}</span>
+          <span>
+            {% if u.role != 'admin' %}
+            <button class="btn-sm" onclick="makeAdmin({{ u.id }}, this)">Make Admin</button>
+            {% else %}
+            <button class="btn-sm btn-sm--danger" onclick="makeAdmin({{ u.id }}, this, 'member')">Revoke</button>
+            {% endif %}
+          </span>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="dash-empty">No members yet.</p>
+      {% endif %}
+    </div>
+
+    <!-- PROGRAMS -->
+    <div class="dash-tab" id="tab-programs">
+      <div class="dash-header">
+        <h2>Outreach Programs 📍</h2>
+        <p>Track programs and update the homepage stats.</p>
+      </div>
+      <div class="dash-section">
+        <h3>Add New Program</h3>
+        <form id="program-form" class="auth-form" style="max-width:480px">
+          <div class="form-group">
+            <label>Program Title</label>
+            <input type="text" id="prog-title" placeholder="e.g. Kwara School Outreach" required/>
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" id="prog-location" placeholder="City / Online"/>
+          </div>
+          <div class="form-group">
+            <label>Students Reached</label>
+            <input type="number" id="prog-students" placeholder="0" min="0"/>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="prog-desc" rows="3" placeholder="Brief description…"></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary">Add Program</button>
+          <p class="form-msg" id="prog-msg"></p>
+        </form>
+      </div>
+      <div class="dash-section">
+        <h3>All Programs</h3>
+        {% if programs %}
+        <div class="admin-table">
+          <div class="admin-table__head">
+            <span>Title</span><span>Location</span><span>Students</span><span>Date</span>
+          </div>
+          {% for p in programs %}
+          <div class="admin-table__row">
+            <span>{{ p.title }}</span>
+            <span>{{ p.location or '—' }}</span>
+            <span>{{ p.students_reached }}</span>
+            <span>{{ p.date.strftime('%b %d, %Y') if p.date else '—' }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="dash-empty">No programs yet.</p>
+        {% endif %}
+      </div>
+    </div>
+
+  </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Tab switching
+document.querySelectorAll('.dash-nav__link[data-tab], .dash-tab-link[data-tab]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    const tab = el.dataset.tab;
+    document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.dash-nav__link').forEach(l => l.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+    if (tab === 'overview') animateAllCounters();
+  });
+});
+
+// Counters
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target) || 0;
+  const dur = 1600, start = performance.now();
+  const step = now => {
+    const p = Math.min((now - start)/dur, 1);
+    el.textContent = Math.floor((1-Math.pow(1-p,3)) * target);
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+function animateAllCounters() {
+  document.querySelectorAll('#tab-overview .dash-stat__num').forEach(animateCounter);
+}
+animateAllCounters();
+
+// Expand message rows
+function expandMsg(row) {
+  const next = row.nextElementSibling;
+  if (next && next.classList.contains('admin-table__expand')) {
+    next.style.display = next.style.display === 'none' ? 'block' : 'none';
+  }
+}
+
+// Mark message read
+async function markRead(e, id, btn) {
+  e.stopPropagation();
+  const res  = await fetch(`/api/admin/message/${id}/read`, { method: 'POST' });
+  const data = await res.json();
+  if (data.success) {
+    btn.closest('.admin-table__row').classList.remove('admin-table__row--unread');
+    btn.outerHTML = '<span class="status-badge status-badge--read">Read</span>';
+  }
+}
+
+// Make admin / revoke
+async function makeAdmin(id, btn, role = 'admin') {
+  const res  = await fetch(`/api/admin/user/${id}/role`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ role })
+  });
+  const data = await res.json();
+  if (data.success) location.reload();
+}
+
+// Add program
+document.getElementById('program-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  btn.disabled = true; btn.textContent = 'Adding…';
+  const res = await fetch('/api/admin/program', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      title:            document.getElementById('prog-title').value,
+      location:         document.getElementById('prog-location').value,
+      students_reached: document.getElementById('prog-students').value || 0,
+      description:      document.getElementById('prog-desc').value
+    })
+  });
+  const data = await res.json();
+  showMsg(document.getElementById('prog-msg'), data.message || data.error, data.success ? 'success' : 'error');
+  if (data.success) { e.target.reset(); setTimeout(() => location.reload(), 1500); }
+  btn.disabled = false; btn.textContent = 'Add Program';
+});
+</script>
+{% endblock %}
