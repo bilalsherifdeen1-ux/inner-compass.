@@ -1,0 +1,316 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard | Inner Compass{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="dash-sidebar">
+    <div class="dash-sidebar__profile">
+      <div class="dash-avatar">{{ user.username[:2].upper() }}</div>
+      <div>
+        <strong>{{ user.username }}</strong>
+        <span class="dash-role">{{ user.role.title() }}</span>
+      </div>
+    </div>
+    <nav class="dash-nav">
+      <a href="#overview"  class="dash-nav__link active" data-tab="overview">🏠 Overview</a>
+      <a href="#mood"      class="dash-nav__link" data-tab="mood">😊 Mood Tracker</a>
+      <a href="#resources" class="dash-nav__link" data-tab="resources">📚 Resources</a>
+      <a href="#profile"   class="dash-nav__link" data-tab="profile">👤 My Profile</a>
+      {% if user.role == 'admin' %}
+      <a href="/admin" class="dash-nav__link dash-nav__link--admin">⚙️ Admin Panel</a>
+      {% endif %}
+    </nav>
+    <a href="/logout" class="dash-logout">↩ Log Out</a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+
+    <!-- OVERVIEW TAB -->
+    <div class="dash-tab active" id="tab-overview">
+      <div class="dash-header">
+        <div>
+          <h2>Welcome back, {{ user.username.split()[0] }} 👋</h2>
+          <p>Member since {{ user.joined_at.strftime('%B %Y') }}</p>
+        </div>
+      </div>
+
+      <!-- Quick stats -->
+      <div class="dash-stats">
+        <div class="dash-stat">
+          <span class="dash-stat__num" data-target="{{ stats.members }}">0</span>
+          <span class="dash-stat__label">Community Members</span>
+        </div>
+        <div class="dash-stat">
+          <span class="dash-stat__num" data-target="{{ stats.programs }}">0</span>
+          <span class="dash-stat__label">Outreach Programs</span>
+        </div>
+        <div class="dash-stat">
+          <span class="dash-stat__num" data-target="{{ stats.reached }}">0</span>
+          <span class="dash-stat__label">Students Reached</span>
+        </div>
+      </div>
+
+      <!-- Mood summary -->
+      <div class="dash-section">
+        <h3>Your Recent Mood</h3>
+        {% if mood_logs %}
+        <div class="mood-history">
+          {% for log in mood_logs %}
+          <div class="mood-chip mood-chip--{{ log.mood }}">
+            <span>{% if log.mood == 'happy' %}😊{% elif log.mood == 'calm' %}😌{% elif log.mood == 'tired' %}😴{% elif log.mood == 'sad' %}😥{% else %}😔{% endif %}</span>
+            <span>{{ log.mood.title() }}</span>
+            <small>{{ log.logged_at.strftime('%b %d') }}</small>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="dash-empty">No mood logs yet. <a href="#mood" class="dash-tab-link" data-tab="mood">Log your first mood →</a></p>
+        {% endif %}
+      </div>
+
+      <!-- Quick links -->
+      <div class="dash-section">
+        <h3>Quick Actions</h3>
+        <div class="quick-actions">
+          <a href="#mood" class="quick-action dash-tab-link" data-tab="mood">
+            <span>😊</span><strong>Log Mood</strong><p>Track how you feel</p>
+          </a>
+          <a href="/resources" class="quick-action">
+            <span>📚</span><strong>Resources</strong><p>Browse the library</p>
+          </a>
+          <a href="/#contact" class="quick-action">
+            <span>💬</span><strong>Contact Us</strong><p>Reach our team</p>
+          </a>
+          <a href="https://drive.google.com/drive/folders/1J3PkAlAbPQRFXikwYcoY3VFdto3Fpi_l" target="_blank" class="quick-action">
+            <span>📂</span><strong>Drive Library</strong><p>Open Google Drive</p>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- MOOD TAB -->
+    <div class="dash-tab" id="tab-mood">
+      <div class="dash-header">
+        <h2>Mood Tracker 😊</h2>
+        <p>Your feelings matter. Tracking them helps you understand patterns.</p>
+      </div>
+
+      <div class="mood-log-form dash-section">
+        <h3>How are you feeling right now?</h3>
+        <div class="mood-picker">
+          <button class="mood-pick-btn" data-mood="happy">😊<span>Happy</span></button>
+          <button class="mood-pick-btn" data-mood="calm">😌<span>Calm</span></button>
+          <button class="mood-pick-btn" data-mood="tired">😴<span>Tired</span></button>
+          <button class="mood-pick-btn" data-mood="sad">😥<span>Sad</span></button>
+          <button class="mood-pick-btn" data-mood="anxious">😔<span>Anxious</span></button>
+        </div>
+        <input type="hidden" id="selected-mood" value=""/>
+        <div class="form-group" style="margin-top:1.5rem">
+          <label>Add a note (optional)</label>
+          <textarea id="mood-note" rows="3" placeholder="What's on your mind today?"></textarea>
+        </div>
+        <button class="btn btn--primary" id="log-mood-btn">Save Mood Entry</button>
+        <p class="form-msg" id="mood-msg"></p>
+      </div>
+
+      <div class="dash-section">
+        <h3>Past 7 Entries</h3>
+        {% if mood_logs %}
+        <div class="mood-table">
+          <div class="mood-table__head">
+            <span>Mood</span><span>Note</span><span>Date</span>
+          </div>
+          {% for log in mood_logs %}
+          <div class="mood-table__row">
+            <span class="mood-badge mood-badge--{{ log.mood }}">
+              {% if log.mood == 'happy' %}😊 Happy
+              {% elif log.mood == 'calm' %}😌 Calm
+              {% elif log.mood == 'tired' %}😴 Tired
+              {% elif log.mood == 'sad' %}😥 Sad
+              {% else %}😔 Anxious{% endif %}
+            </span>
+            <span>{{ log.note or '—' }}</span>
+            <span>{{ log.logged_at.strftime('%b %d, %Y') }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="dash-empty">No entries yet. Log your first mood above!</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- RESOURCES TAB -->
+    <div class="dash-tab" id="tab-resources">
+      <div class="dash-header">
+        <h2>Resource Library 📚</h2>
+        <p>Everything you need on your mental wellness journey.</p>
+      </div>
+      <div class="res-grid">
+        <a href="https://res.cloudinary.com/doxfhckdx/image/upload/v1778670168/inner_compass_docs/xup626au2n0c8l5allvm.pdf" target="_blank" class="res-card">
+          <div class="res-card__icon">📋</div>
+          <h4>ICP Blueprint</h4>
+          <p>Our official blueprint and program overview document.</p>
+          <span class="res-card__tag">PDF</span>
+        </a>
+        <a href="https://drive.google.com/drive/folders/1J3PkAlAbPQRFXikwYcoY3VFdto3Fpi_l" target="_blank" class="res-card">
+          <div class="res-card__icon">📂</div>
+          <h4>Drive Library</h4>
+          <p>Full collection of materials, guides, and toolkits.</p>
+          <span class="res-card__tag">Google Drive</span>
+        </a>
+        <a href="/resources" class="res-card">
+          <div class="res-card__icon">📓</div>
+          <h4>Journaling Prompts</h4>
+          <p>Guided questions to explore your thoughts and feelings.</p>
+          <span class="res-card__tag">Interactive</span>
+        </a>
+        <a href="/resources" class="res-card">
+          <div class="res-card__icon">🧘</div>
+          <h4>Self-Help Toolkit</h4>
+          <p>Practical exercises for emotional regulation and resilience.</p>
+          <span class="res-card__tag">Toolkit</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- PROFILE TAB -->
+    <div class="dash-tab" id="tab-profile">
+      <div class="dash-header">
+        <h2>My Profile 👤</h2>
+        <p>Keep your details up to date.</p>
+      </div>
+      <div class="dash-section">
+        <div class="profile-avatar-row">
+          <div class="profile-avatar">{{ user.username[:2].upper() }}</div>
+          <div>
+            <strong>{{ user.username }}</strong>
+            <p>{{ user.email }}</p>
+            <span class="dash-role">{{ user.role.title() }}</span>
+          </div>
+        </div>
+        <form id="profile-form" class="auth-form" style="max-width:480px;margin-top:2rem">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="p-name" value="{{ user.username }}" required/>
+          </div>
+          <div class="form-group">
+            <label>Email <small style="color:var(--text-muted)">(cannot be changed)</small></label>
+            <input type="email" value="{{ user.email }}" disabled/>
+          </div>
+          <div class="form-group">
+            <label>Bio / About Me</label>
+            <textarea id="p-bio" rows="4" placeholder="Tell us a bit about yourself…">{{ user.bio or '' }}</textarea>
+          </div>
+          <button type="submit" class="btn btn--primary">Save Changes</button>
+          <p class="form-msg" id="profile-msg"></p>
+        </form>
+      </div>
+    </div>
+
+  </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Tab switching
+function switchTab(tabName) {
+  document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.dash-nav__link').forEach(l => l.classList.remove('active'));
+  const tab  = document.getElementById('tab-' + tabName);
+  const link = document.querySelector(`[data-tab="${tabName}"]`);
+  if (tab)  tab.classList.add('active');
+  if (link) link.classList.add('active');
+  // Trigger counter animation when overview becomes visible
+  if (tabName === 'overview') animateAllCounters();
+}
+
+document.querySelectorAll('.dash-nav__link[data-tab], .dash-tab-link[data-tab]').forEach(el => {
+  el.addEventListener('click', (e) => {
+    e.preventDefault();
+    switchTab(el.dataset.tab);
+  });
+});
+
+// Counters
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target) || 0;
+  if (target === 0) { el.textContent = '0'; return; }
+  const dur = 1800, start = performance.now();
+  const fmt = n => n >= 1000 ? (n/1000).toFixed(1)+'k' : n;
+  const step = now => {
+    const p = Math.min((now - start) / dur, 1);
+    const e = 1 - Math.pow(1-p, 3);
+    el.textContent = fmt(Math.floor(e * target));
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+function animateAllCounters() {
+  document.querySelectorAll('#tab-overview .dash-stat__num').forEach(animateCounter);
+}
+animateAllCounters();
+
+// Mood picker
+let selectedMood = '';
+document.querySelectorAll('.mood-pick-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mood-pick-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedMood = btn.dataset.mood;
+    document.getElementById('selected-mood').value = selectedMood;
+  });
+});
+
+document.getElementById('log-mood-btn').addEventListener('click', async () => {
+  const mood = selectedMood;
+  const note = document.getElementById('mood-note').value.trim();
+  const msg  = document.getElementById('mood-msg');
+  const btn  = document.getElementById('log-mood-btn');
+  if (!mood) return showMsg(msg, 'Please select a mood first.', 'error');
+
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    const res  = await fetch('/api/mood', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ mood, note })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showMsg(msg, data.message, 'success');
+      document.getElementById('mood-note').value = '';
+      document.querySelectorAll('.mood-pick-btn').forEach(b => b.classList.remove('selected'));
+      selectedMood = '';
+      setTimeout(() => location.reload(), 1800);
+    } else {
+      showMsg(msg, data.error, 'error');
+    }
+  } catch { showMsg(msg, 'Network error.', 'error'); }
+  finally  { btn.disabled = false; btn.textContent = 'Save Mood Entry'; }
+});
+
+// Profile form
+document.getElementById('profile-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type=submit]');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  const res  = await fetch('/api/profile', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      full_name: document.getElementById('p-name').value.trim(),
+      bio:       document.getElementById('p-bio').value.trim()
+    })
+  });
+  const data = await res.json();
+  showMsg(document.getElementById('profile-msg'), data.message || data.error, data.success ? 'success' : 'error');
+  btn.disabled = false; btn.textContent = 'Save Changes';
+});
+</script>
+{% endblock %}
