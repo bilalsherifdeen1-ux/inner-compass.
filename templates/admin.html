@@ -1,0 +1,542 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel | Inner Compass{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+  <aside class="dash-sidebar">
+    <div class="dash-sidebar__profile">
+      <div class="dash-avatar" style="background:linear-gradient(135deg,#e74c3c,#c0392b)">AD</div>
+      <div><strong style="color:white">Admin Panel</strong><br><span class="dash-role">{{ username }}</span></div>
+    </div>
+    <nav class="dash-nav">
+      <a class="dash-nav__link active" data-tab="overview">📊 Overview</a>
+      <a class="dash-nav__link" data-tab="announcements">📢 Announcements</a>
+      <a class="dash-nav__link" data-tab="executives">👥 Leadership</a>
+      <a class="dash-nav__link" data-tab="events">📅 Events</a>
+      <a class="dash-nav__link" data-tab="messages">✉️ Messages{% if unread %}<span class="badge">{{ unread }}</span>{% endif %}</a>
+      <a class="dash-nav__link" data-tab="members">🙋 Members</a>
+      <a class="dash-nav__link" data-tab="programs">📍 Programs</a>
+      <a class="dash-nav__link" data-tab="subscribers">📧 Subscribers</a>
+    </nav>
+    <a href="/dashboard" class="dash-logout">← Member Dashboard</a>
+  </aside>
+
+  <main class="dash-main">
+
+    <!-- OVERVIEW -->
+    <div class="dash-tab active" id="tab-overview">
+      <div class="dash-header"><h2>Admin Overview ⚙️</h2><p>Everything at a glance.</p></div>
+      <div class="dash-stats">
+        <div class="dash-stat"><span class="dash-stat__num" data-target="{{ stats.members }}">0</span><span class="dash-stat__label">Members</span></div>
+        <div class="dash-stat"><span class="dash-stat__num" data-target="{{ messages|length }}">0</span><span class="dash-stat__label">Messages</span></div>
+        <div class="dash-stat"><span class="dash-stat__num" data-target="{{ executives|length }}">0</span><span class="dash-stat__label">Executives</span></div>
+        <div class="dash-stat"><span class="dash-stat__num" data-target="{{ events|length }}">0</span><span class="dash-stat__label">Events</span></div>
+        <div class="dash-stat"><span class="dash-stat__num" data-target="{{ stats.reached }}">0</span><span class="dash-stat__label">Students Reached</span></div>
+        <div class="dash-stat"><span class="dash-stat__num" data-target="{{ subscribers|length }}">0</span><span class="dash-stat__label">Subscribers</span></div>
+      </div>
+      {% if unread %}<div class="alert alert--warning">📬 <strong>{{ unread }} unread message{{ 's' if unread!=1 }}</strong>. <a href="#" class="dash-tab-link" data-tab="messages">View now →</a></div>{% endif %}
+      <div class="dash-section">
+        <h3>Quick Actions</h3>
+        <div class="quick-actions">
+          <a href="#" class="quick-action dash-tab-link" data-tab="announcements"><span>📢</span><strong>Announcement</strong><p>Post an update</p></a>
+          <a href="#" class="quick-action dash-tab-link" data-tab="executives"><span>👥</span><strong>Add Executive</strong><p>Update leadership</p></a>
+          <a href="#" class="quick-action dash-tab-link" data-tab="events"><span>📅</span><strong>Add Event</strong><p>Schedule event</p></a>
+          <a href="#" class="quick-action dash-tab-link" data-tab="messages"><span>✉️</span><strong>Messages</strong><p>Read contacts</p></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANNOUNCEMENTS -->
+    <div class="dash-tab" id="tab-announcements">
+      <div class="dash-header"><h2>📢 Announcements</h2><p>The most recent active one shows on the homepage banner.</p></div>
+      <div class="dash-section">
+        <h3>Post New Announcement</h3>
+        <form id="ann-form" class="admin-form">
+          <div class="form-group"><label>Title</label><input type="text" id="ann-title" placeholder="e.g. Webinar Registration Open!" required/></div>
+          <div class="form-group"><label>Content</label><textarea id="ann-content" rows="3" placeholder="Brief message shown on the banner…" required></textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label>Link URL (optional)</label><input type="text" id="ann-link" placeholder="/signup or https://…"/></div>
+            <div class="form-group"><label>Link Button Text</label><input type="text" id="ann-link-text" placeholder="Register Now" value="Register Now"/></div>
+          </div>
+          <button type="submit" class="btn btn--primary">Publish Announcement</button>
+          <p class="form-msg" id="ann-msg"></p>
+        </form>
+      </div>
+      <div class="dash-section">
+        <h3>All Announcements ({{ announcements|length }})</h3>
+        {% if announcements %}
+        <div class="content-list">
+          {% for a in announcements %}
+          <div class="content-item" id="ann-item-{{ a.id }}">
+            <div class="content-item__info">
+              <strong>{{ a.title }}</strong>
+              <p>{{ a.content }}</p>
+              {% if a.link %}<small>🔗 {{ a.link }}</small>{% endif %}
+            </div>
+            <div class="content-item__actions">
+              <span class="status-badge status-badge--{% if a.active %}read{% else %}admin{% endif %}">{{ 'Active' if a.active else 'Hidden' }}</span>
+              <button class="btn-sm" onclick="toggleItem('announcement',{{ a.id }},this)">{{ 'Hide' if a.active else 'Show' }}</button>
+              <button class="btn-sm btn-sm--danger" onclick="deleteItem('announcement',{{ a.id }},'ann-item-{{ a.id }}')">Delete</button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}<p class="dash-empty">No announcements yet.</p>{% endif %}
+      </div>
+    </div>
+
+    <!-- EXECUTIVES -->
+    <div class="dash-tab" id="tab-executives">
+      <div class="dash-header"><h2>👥 Leadership Team</h2><p>Add, edit, or remove executives. Photos appear on the homepage.</p></div>
+      <div class="dash-section">
+        <h3>Add New Executive</h3>
+        <form id="exec-form" class="admin-form" enctype="multipart/form-data">
+          <div class="form-row">
+            <div class="form-group"><label>Full Name *</label><input type="text" id="exec-name" name="name" placeholder="e.g. Amina Yusuf" required/></div>
+            <div class="form-group"><label>Role / Title *</label><input type="text" id="exec-role" name="role" placeholder="e.g. Director of Programs" required/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Badge <small>(optional — e.g. Founder)</small></label><input type="text" id="exec-badge" name="badge" placeholder="Founder"/></div>
+            <div class="form-group"><label>Display Order <small>(1 = first)</small></label><input type="number" id="exec-order" name="order" value="99" min="1"/></div>
+          </div>
+          <div class="form-group"><label>Bio</label><textarea id="exec-bio" name="bio" rows="2" placeholder="Brief description…"></textarea></div>
+          <div class="form-group">
+            <label>Photo <small>(JPG or PNG, max 2MB)</small></label>
+            <div class="photo-upload-box" id="exec-photo-box" onclick="document.getElementById('exec-photo').click()">
+              <img id="exec-photo-preview" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:12px"/>
+              <div class="photo-upload-box__placeholder" id="exec-photo-placeholder">
+                <span style="font-size:2rem">📷</span>
+                <p>Click to choose photo</p>
+                <small>Square or portrait works best</small>
+              </div>
+            </div>
+            <input type="file" id="exec-photo" name="photo" accept="image/jpeg,image/png,image/webp" style="display:none"
+                   onchange="previewPhoto(this,'exec-photo-preview','exec-photo-placeholder')"/>
+          </div>
+          <button type="submit" class="btn btn--primary" id="exec-submit-btn">Add to Leadership</button>
+          <p class="form-msg" id="exec-msg"></p>
+        </form>
+      </div>
+      <div class="dash-section">
+        <h3>Current Team ({{ executives|length }})</h3>
+        {% if executives %}
+        <div class="exec-cards-admin">
+          {% for e in executives %}
+          <div class="exec-admin-card {% if not e.active %}exec-admin-card--hidden{% endif %}" id="exec-card-{{ e.id }}">
+            <div class="exec-admin-card__photo">
+              {% if e.photo_url %}
+                <img src="{{ e.photo_url }}" alt="{{ e.name }}" id="exec-img-{{ e.id }}"/>
+              {% else %}
+                <div class="exec-admin-card__initials" id="exec-img-{{ e.id }}">{{ e.initials or e.name[:2].upper() }}</div>
+              {% endif %}
+              <label class="exec-photo-change-btn" title="Change photo">
+                📷 Change
+                <input type="file" accept="image/jpeg,image/png,image/webp" style="display:none"
+                       onchange="uploadExecPhoto({{ e.id }}, this)"/>
+              </label>
+            </div>
+            <div class="exec-admin-card__info">
+              <strong>{{ e.name }}</strong>
+              <span>{{ e.role }}</span>
+              {% if e.badge %}<span class="status-badge status-badge--read" style="font-size:.65rem">{{ e.badge }}</span>{% endif %}
+              {% if e.bio %}<p>{{ e.bio }}</p>{% endif %}
+            </div>
+            <div class="exec-admin-card__actions">
+              <button class="btn-sm" onclick="openEditExec({{ e.id }},'{{ e.name|replace("'","\\'") }}','{{ e.role|replace("'","\\'") }}','{{ e.bio|replace("'","\\'") }}','{{ e.badge }}',{{ e.order }})">✏️ Edit</button>
+              <button class="btn-sm" onclick="toggleItem('executive',{{ e.id }},this)">{{ '🙈 Hide' if e.active else '👁 Show' }}</button>
+              <button class="btn-sm btn-sm--danger" onclick="deleteItem('executive',{{ e.id }},'exec-card-{{ e.id }}')">🗑 Remove</button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}<p class="dash-empty">No executives added yet. Use the form above.</p>{% endif %}
+      </div>
+    </div>
+
+    <!-- EVENTS -->
+    <div class="dash-tab" id="tab-events">
+      <div class="dash-header"><h2>📅 Events</h2><p>Events appear on the homepage. Toggle or delete to manage visibility.</p></div>
+      <div class="dash-section">
+        <h3>Add New Event</h3>
+        <form id="event-form" class="admin-form">
+          <div class="form-row">
+            <div class="form-group"><label>Event Title *</label><input type="text" id="ev-title" placeholder="e.g. ICP Webinar Season 2" required/></div>
+            <div class="form-group">
+              <label>Type</label>
+              <select id="ev-type">
+                <option value="general">📅 General</option>
+                <option value="webinar">🧠 Webinar</option>
+                <option value="outreach">🤝 Outreach</option>
+                <option value="summit">🏔️ Summit</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Date &amp; Time</label><input type="datetime-local" id="ev-date"/></div>
+            <div class="form-group"><label>Location</label><input type="text" id="ev-location" placeholder="Ilorin / Online / Zoom"/></div>
+          </div>
+          <div class="form-group"><label>Description</label><textarea id="ev-desc" rows="3" placeholder="Brief description…"></textarea></div>
+          <button type="submit" class="btn btn--primary">Add Event</button>
+          <p class="form-msg" id="ev-msg"></p>
+        </form>
+      </div>
+      <div class="dash-section">
+        <h3>All Events ({{ events|length }})</h3>
+        {% if events %}
+        <div class="content-list">
+          {% for ev in events %}
+          <div class="content-item" id="ev-item-{{ ev.id }}">
+            <div class="content-item__info">
+              <strong>{{ ev.title }}</strong>
+              <p>{% if ev.event_date %}📅 {{ ev.event_date.strftime('%b %d, %Y %H:%M') }}{% endif %}{% if ev.location %} · 📍 {{ ev.location }}{% endif %}</p>
+              {% if ev.description %}<small>{{ ev.description }}</small>{% endif %}
+            </div>
+            <div class="content-item__actions">
+              <span class="status-badge status-badge--{% if ev.active %}read{% else %}admin{% endif %}">{{ 'Active' if ev.active else 'Hidden' }}</span>
+              <button class="btn-sm" onclick="toggleItem('event',{{ ev.id }},this)">{{ 'Hide' if ev.active else 'Show' }}</button>
+              <button class="btn-sm btn-sm--danger" onclick="deleteItem('event',{{ ev.id }},'ev-item-{{ ev.id }}')">Delete</button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}<p class="dash-empty">No events added yet.</p>{% endif %}
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="dash-tab" id="tab-messages">
+      <div class="dash-header"><h2>✉️ Messages</h2><p>{{ messages|length }} total · {{ unread }} unread</p></div>
+      {% if messages %}
+      <div class="dash-section" style="padding:0;overflow:hidden">
+        <div class="admin-table">
+          <div class="admin-table__head" style="grid-template-columns:1.5fr 1.5fr 1fr .8fr">
+            <span>Name</span><span>Subject</span><span>Date</span><span>Status</span>
+          </div>
+          {% for msg in messages %}
+          <div class="admin-table__row {% if not msg.read %}admin-table__row--unread{% endif %}" onclick="expandMsg(this)" style="grid-template-columns:1.5fr 1.5fr 1fr .8fr">
+            <span><strong>{{ msg.name }}</strong><br><small>{{ msg.email }}</small></span>
+            <span>{{ msg.subject }}</span>
+            <span style="font-size:.78rem">{{ msg.created_at.strftime('%b %d, %Y') }}</span>
+            <span>{% if msg.read %}<span class="status-badge status-badge--read">Read</span>{% else %}<button class="btn-sm" onclick="markRead(event,{{ msg.id }},this)">Mark Read</button>{% endif %}</span>
+          </div>
+          <div class="admin-table__expand" style="display:none">
+            <p style="margin-bottom:.75rem;background:var(--cream);padding:1rem;border-radius:8px">{{ msg.message }}</p>
+            <a href="mailto:{{ msg.email }}?subject=Re: {{ msg.subject }}" class="btn-sm">Reply via Email ↗</a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% else %}<p class="dash-empty" style="padding:2rem">No messages yet.</p>{% endif %}
+    </div>
+
+    <!-- MEMBERS -->
+    <div class="dash-tab" id="tab-members">
+      <div class="dash-header"><h2>🙋 Members</h2><p>{{ stats.members }} registered members</p></div>
+      <div class="dash-section" style="padding:0;overflow:hidden">
+        <div class="admin-table">
+          <div class="admin-table__head" style="grid-template-columns:1.5fr 2fr .8fr 1fr 1fr">
+            <span>Name</span><span>Email</span><span>Role</span><span>Joined</span><span>Actions</span>
+          </div>
+          {% for u in users %}
+          <div class="admin-table__row" style="grid-template-columns:1.5fr 2fr .8fr 1fr 1fr">
+            <span>{{ u.username }}</span>
+            <span style="font-size:.78rem;word-break:break-all">{{ u.email }}</span>
+            <span><span class="status-badge status-badge--{{ u.role }}">{{ u.role.title() }}</span></span>
+            <span style="font-size:.78rem">{{ u.joined_at.strftime('%b %d, %Y') }}</span>
+            <span>
+              {% if u.role != 'admin' %}<button class="btn-sm" onclick="makeAdmin({{ u.id }},this)">Make Admin</button>
+              {% else %}<button class="btn-sm btn-sm--danger" onclick="makeAdmin({{ u.id }},this,'member')">Revoke</button>{% endif %}
+            </span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRAMS -->
+    <div class="dash-tab" id="tab-programs">
+      <div class="dash-header"><h2>📍 Outreach Programs</h2><p>Updates the homepage stats counters.</p></div>
+      <div class="dash-section">
+        <h3>Add Program</h3>
+        <form id="program-form" class="admin-form">
+          <div class="form-row">
+            <div class="form-group"><label>Title *</label><input type="text" id="prog-title" placeholder="e.g. Kwara School Outreach" required/></div>
+            <div class="form-group"><label>Location</label><input type="text" id="prog-location" placeholder="Ilorin / Online"/></div>
+          </div>
+          <div class="form-group"><label>Students Reached</label><input type="number" id="prog-students" placeholder="0" min="0"/></div>
+          <button type="submit" class="btn btn--primary">Add Program</button>
+          <p class="form-msg" id="prog-msg"></p>
+        </form>
+      </div>
+      {% if programs %}
+      <div class="dash-section" style="padding:0;overflow:hidden">
+        <div class="admin-table">
+          <div class="admin-table__head" style="grid-template-columns:2fr 1fr 1fr 1fr">
+            <span>Title</span><span>Location</span><span>Students</span><span>Date</span>
+          </div>
+          {% for p in programs %}
+          <div class="admin-table__row" style="grid-template-columns:2fr 1fr 1fr 1fr">
+            <span>{{ p.title }}</span><span>{{ p.location or '—' }}</span>
+            <span>{{ p.students_reached }}</span>
+            <span style="font-size:.78rem">{{ p.date.strftime('%b %d, %Y') if p.date else '—' }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- SUBSCRIBERS -->
+    <div class="dash-tab" id="tab-subscribers">
+      <div class="dash-header"><h2>📧 Subscribers</h2><p>{{ subscribers|length }} newsletter subscribers</p></div>
+      {% if subscribers %}
+      <div class="dash-section" style="padding:0;overflow:hidden">
+        <div class="admin-table">
+          <div class="admin-table__head" style="grid-template-columns:2fr 1fr">
+            <span>Email</span><span>Date</span>
+          </div>
+          {% for s in subscribers %}
+          <div class="admin-table__row" style="grid-template-columns:2fr 1fr">
+            <span>{{ s.email }}</span>
+            <span style="font-size:.78rem">{{ s.subscribed_at.strftime('%b %d, %Y') }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% else %}<p class="dash-empty" style="padding:2rem">No subscribers yet.</p>{% endif %}
+    </div>
+
+  </main>
+</div>
+
+<!-- Edit Executive Modal -->
+<div class="modal-overlay" id="edit-exec-modal" onclick="if(event.target===this)closeEditExec()">
+  <div class="modal">
+    <button class="modal__close" onclick="closeEditExec()">✕</button>
+    <h3>✏️ Edit Executive</h3>
+    <form id="edit-exec-form" style="margin-top:1rem">
+      <input type="hidden" id="edit-exec-id"/>
+      <div class="form-row">
+        <div class="form-group"><label>Full Name</label><input type="text" id="edit-exec-name" required/></div>
+        <div class="form-group"><label>Role / Title</label><input type="text" id="edit-exec-role" required/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Badge</label><input type="text" id="edit-exec-badge"/></div>
+        <div class="form-group"><label>Order</label><input type="number" id="edit-exec-order" min="1"/></div>
+      </div>
+      <div class="form-group"><label>Bio</label><textarea id="edit-exec-bio" rows="3"></textarea></div>
+      <button type="submit" class="btn btn--primary btn--full">Save Changes</button>
+      <p class="form-msg" id="edit-exec-msg"></p>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ── Tabs ──────────────────────────────────────────────────
+document.querySelectorAll('[data-tab]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    const tab = el.dataset.tab;
+    document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.dash-nav__link').forEach(l => l.classList.remove('active'));
+    const t = document.getElementById('tab-' + tab);
+    if (t) t.classList.add('active');
+    document.querySelectorAll(`[data-tab="${tab}"]`).forEach(l => l.classList.add('active'));
+    if (tab === 'overview') animateAllCounters();
+  });
+});
+
+// ── Counters ──────────────────────────────────────────────
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target) || 0;
+  if (!target) { el.textContent = '0'; return; }
+  const dur = 1600, start = performance.now();
+  const step = now => {
+    const p = Math.min((now - start) / dur, 1);
+    el.textContent = Math.floor((1 - Math.pow(1 - p, 3)) * target);
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+function animateAllCounters() {
+  document.querySelectorAll('#tab-overview .dash-stat__num').forEach(animateCounter);
+}
+animateAllCounters();
+
+function showMsg(el, text, type) { if (!el) return; el.textContent = text; el.className = 'form-msg ' + type; }
+
+// ── Messages ──────────────────────────────────────────────
+function expandMsg(row) {
+  const n = row.nextElementSibling;
+  if (n && n.classList.contains('admin-table__expand'))
+    n.style.display = n.style.display === 'none' ? 'block' : 'none';
+}
+async function markRead(e, id, btn) {
+  e.stopPropagation();
+  const res = await fetch(`/api/admin/message/${id}/read`, { method: 'POST' });
+  const d = await res.json();
+  if (d.success) { btn.closest('.admin-table__row').classList.remove('admin-table__row--unread'); btn.outerHTML = '<span class="status-badge status-badge--read">Read</span>'; }
+}
+
+// ── Members ───────────────────────────────────────────────
+async function makeAdmin(id, btn, role = 'admin') {
+  const res = await fetch(`/api/admin/user/${id}/role`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ role }) });
+  const d = await res.json();
+  if (d.success) location.reload();
+}
+
+// ── Toggle / Delete ───────────────────────────────────────
+async function toggleItem(type, id, btn) {
+  const res = await fetch(`/api/admin/${type}/${id}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'toggle' }) });
+  const d = await res.json();
+  if (d.success) location.reload();
+}
+async function deleteItem(type, id, cardId) {
+  if (!confirm('Delete this permanently?')) return;
+  const res = await fetch(`/api/admin/${type}/${id}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'delete' }) });
+  const d = await res.json();
+  if (d.success) { const el = document.getElementById(cardId); if (el) el.remove(); }
+}
+
+// ── Photo preview ─────────────────────────────────────────
+function previewPhoto(input, previewId, placeholderId) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById(previewId);
+    const ph  = document.getElementById(placeholderId);
+    img.src = e.target.result; img.style.display = 'block';
+    if (ph) ph.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── Upload executive photo ────────────────────────────────
+async function uploadExecPhoto(id, input) {
+  const file = input.files[0]; if (!file) return;
+  if (file.size > 2 * 1024 * 1024) { alert('Photo must be under 2MB.'); return; }
+  const fd = new FormData(); fd.append('photo', file);
+  const res = await fetch(`/api/admin/executive/${id}/photo`, { method: 'POST', body: fd });
+  const d = await res.json();
+  if (d.success) {
+    const el = document.getElementById(`exec-img-${id}`);
+    if (el && el.tagName === 'IMG') { el.src = d.photo_url; }
+    else { location.reload(); }
+  } else { alert(d.error || 'Upload failed.'); }
+}
+
+// ── Add executive ─────────────────────────────────────────
+document.getElementById('exec-form').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const btn = document.getElementById('exec-submit-btn');
+  const msg = document.getElementById('exec-msg');
+  const photo = document.getElementById('exec-photo');
+  if (photo.files[0] && photo.files[0].size > 2 * 1024 * 1024) {
+    showMsg(msg, 'Photo must be under 2MB.', 'error'); return;
+  }
+  btn.disabled = true; btn.textContent = 'Adding…';
+  try {
+    const fd = new FormData(this);
+    const res = await fetch('/api/admin/executive', { method: 'POST', body: fd });
+    const d = await res.json();
+    showMsg(msg, d.message || d.error, d.success ? 'success' : 'error');
+    if (d.success) { this.reset(); document.getElementById('exec-photo-preview').style.display = 'none'; document.getElementById('exec-photo-placeholder').style.display = ''; setTimeout(() => location.reload(), 1200); }
+  } catch { showMsg(msg, 'Network error.', 'error'); }
+  finally { btn.disabled = false; btn.textContent = 'Add to Leadership'; }
+});
+
+// ── Edit executive modal ──────────────────────────────────
+function openEditExec(id, name, role, bio, badge, order) {
+  document.getElementById('edit-exec-id').value = id;
+  document.getElementById('edit-exec-name').value = name;
+  document.getElementById('edit-exec-role').value = role;
+  document.getElementById('edit-exec-bio').value = bio;
+  document.getElementById('edit-exec-badge').value = badge;
+  document.getElementById('edit-exec-order').value = order;
+  document.getElementById('edit-exec-modal').classList.add('open');
+}
+function closeEditExec() { document.getElementById('edit-exec-modal').classList.remove('open'); }
+
+document.getElementById('edit-exec-form').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const id = document.getElementById('edit-exec-id').value;
+  const btn = this.querySelector('button[type=submit]');
+  const msg = document.getElementById('edit-exec-msg');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    const res = await fetch(`/api/admin/executive/${id}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name:  document.getElementById('edit-exec-name').value.trim(),
+        role:  document.getElementById('edit-exec-role').value.trim(),
+        bio:   document.getElementById('edit-exec-bio').value.trim(),
+        badge: document.getElementById('edit-exec-badge').value.trim(),
+        order: document.getElementById('edit-exec-order').value
+      })
+    });
+    const d = await res.json();
+    showMsg(msg, d.message || d.error, d.success ? 'success' : 'error');
+    if (d.success) setTimeout(() => { closeEditExec(); location.reload(); }, 900);
+  } catch { showMsg(msg, 'Network error.', 'error'); }
+  finally { btn.disabled = false; btn.textContent = 'Save Changes'; }
+});
+
+// ── Announcement ──────────────────────────────────────────
+document.getElementById('ann-form').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const btn = this.querySelector('button[type=submit]');
+  const msg = document.getElementById('ann-msg');
+  btn.disabled = true; btn.textContent = 'Publishing…';
+  try {
+    const res = await fetch('/api/admin/announcement', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: document.getElementById('ann-title').value.trim(), content: document.getElementById('ann-content').value.trim(), link: document.getElementById('ann-link').value.trim(), link_text: document.getElementById('ann-link-text').value.trim() || 'Learn More' })
+    });
+    const d = await res.json();
+    showMsg(msg, d.message || d.error, d.success ? 'success' : 'error');
+    if (d.success) { this.reset(); setTimeout(() => location.reload(), 1200); }
+  } catch { showMsg(msg, 'Network error.', 'error'); }
+  finally { btn.disabled = false; btn.textContent = 'Publish Announcement'; }
+});
+
+// ── Event ─────────────────────────────────────────────────
+document.getElementById('event-form').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const btn = this.querySelector('button[type=submit]');
+  const msg = document.getElementById('ev-msg');
+  btn.disabled = true; btn.textContent = 'Adding…';
+  try {
+    const res = await fetch('/api/admin/event', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: document.getElementById('ev-title').value.trim(), event_type: document.getElementById('ev-type').value, event_date: document.getElementById('ev-date').value, location: document.getElementById('ev-location').value.trim(), description: document.getElementById('ev-desc').value.trim() })
+    });
+    const d = await res.json();
+    showMsg(msg, d.message || d.error, d.success ? 'success' : 'error');
+    if (d.success) { this.reset(); setTimeout(() => location.reload(), 1200); }
+  } catch { showMsg(msg, 'Network error.', 'error'); }
+  finally { btn.disabled = false; btn.textContent = 'Add Event'; }
+});
+
+// ── Program ───────────────────────────────────────────────
+document.getElementById('program-form').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const btn = this.querySelector('button[type=submit]');
+  const msg = document.getElementById('prog-msg');
+  btn.disabled = true; btn.textContent = 'Adding…';
+  try {
+    const res = await fetch('/api/admin/program', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: document.getElementById('prog-title').value.trim(), location: document.getElementById('prog-location').value.trim(), students_reached: document.getElementById('prog-students').value || 0 })
+    });
+    const d = await res.json();
+    showMsg(msg, d.message || d.error, d.success ? 'success' : 'error');
+    if (d.success) { this.reset(); setTimeout(() => location.reload(), 1500); }
+  } catch { showMsg(msg, 'Network error.', 'error'); }
+  finally { btn.disabled = false; btn.textContent = 'Add Program'; }
+});
+</script>
+{% endblock %}
